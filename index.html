@@ -3,289 +3,272 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>From Zero to Python with AI — Four Ideas, One Step Counter</title>
+<title>From Zero to Python with AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --ink:#16263A;        /* deep slate-navy: text + dark UI       */
-    --ink-2:#24405C;       /* panel ink                             */
-    --paper:#F6F4EF;       /* warm off-white surface                */
-    --paper-2:#FFFFFF;     /* card surface                          */
-    --coral:#FF6A3D;       /* motion / active accent                */
-    --green:#1FB67A;       /* success / goal-hit                    */
-    --blue:#3E6FA8;        /* cool secondary / code / false branch  */
-    --muted:#8A95A3;       /* dimmed                                */
-    --line:#E3DFD6;        /* hairline                              */
-    --code-bg:#16263A;
-    --code-fg:#E8ECF1;
-    --radius:14px;
+    --ink:#16263A; --ink-2:#24405C; --paper:#F6F4EF; --paper-2:#FFFFFF;
+    --coral:#FF6A3D; --green:#1FB67A; --blue:#3E6FA8; --muted:#8A95A3;
+    --line:#E3DFD6; --code-bg:#16263A; --code-fg:#E8ECF1; --radius:14px;
     --display:'Space Grotesk',system-ui,sans-serif;
-    --body:'Inter',system-ui,sans-serif;
-    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
   }
-
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{
-    margin:0;background:var(--paper);color:var(--ink);
-    font-family:var(--body);line-height:1.55;
-    -webkit-font-smoothing:antialiased;
-  }
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.55;-webkit-font-smoothing:antialiased}
   .wrap{max-width:920px;margin:0 auto;padding:0 22px}
+  a{color:var(--blue)}
+
+  /* ---------- nav ---------- */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(246,244,239,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav-in{max-width:920px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:14px}
+  .nav-brand{font-family:var(--mono);font-weight:700;font-size:.82rem;letter-spacing:.02em;color:var(--ink);text-decoration:none;white-space:nowrap}
+  .nav-brand b{color:var(--coral)}
+  .nav-links{margin-left:auto;display:flex;gap:6px}
+  .nav-links a{font-family:var(--body);font-weight:600;font-size:.82rem;text-decoration:none;color:var(--ink-2);padding:6px 11px;border-radius:8px}
+  .nav-links a:hover{background:rgba(36,64,92,.08)}
+  .nav-links a b{color:var(--coral)}
+  .progress{height:3px;background:var(--coral);width:0;transition:width .15s ease}
 
   /* ---------- hero ---------- */
-  .hero{padding:64px 0 28px;border-bottom:1px solid var(--line)}
-  .kicker{
-    font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;
-    text-transform:uppercase;color:var(--coral);font-weight:500;margin:0 0 18px;
-    display:flex;align-items:center;gap:10px;
-  }
-  .kicker::before{content:"";width:26px;height:2px;background:var(--coral);display:inline-block}
-  .hero h1{
-    font-family:var(--display);font-weight:700;line-height:1.04;
-    font-size:clamp(2.1rem,6vw,3.6rem);margin:0 0 16px;letter-spacing:-.01em;
-  }
-  .hero h1 em{font-style:normal;color:var(--coral)}
-  .hero p{font-size:1.12rem;max-width:54ch;margin:0;color:var(--ink-2)}
-  .pedo{
-    display:inline-flex;align-items:baseline;gap:8px;margin-top:26px;
-    font-family:var(--mono);background:var(--ink);color:var(--paper);
-    padding:10px 16px;border-radius:999px;font-size:.9rem;font-weight:500;
-  }
-  .pedo b{color:var(--coral);font-size:1.15rem}
+  .hero{padding:58px 0 34px;border-bottom:1px solid var(--line)}
+  .kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--coral);font-weight:500;margin:0 0 18px;display:flex;align-items:center;gap:10px}
+  .kicker::before{content:"";width:26px;height:2px;background:var(--coral)}
+  .hero h1{font-family:var(--display);font-weight:700;line-height:1.05;font-size:clamp(2rem,6vw,3.4rem);margin:0 0 18px;letter-spacing:-.01em}
+  .hero h1 .a{color:var(--coral)} .hero h1 .b{color:var(--blue)} .hero h1 .c{color:var(--green)}
+  .hero p{font-size:1.12rem;max-width:56ch;margin:0;color:var(--ink-2)}
+  .hero .lead-cta{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px}
 
-  /* ---------- panels ---------- */
-  .panels{padding:8px 0 10px}
-  .panel{padding:44px 0;border-bottom:1px solid var(--line)}
-  .phead{display:flex;align-items:flex-start;gap:18px;margin-bottom:22px}
-  .pnum{
-    font-family:var(--mono);font-weight:700;font-size:1rem;color:var(--paper);
-    background:var(--ink);width:42px;height:42px;border-radius:11px;flex:none;
-    display:grid;place-items:center;
-  }
-  .ptitle{flex:1}
-  .ptitle .eyebrow{
-    font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
-    color:var(--muted);margin:2px 0 4px;
-  }
-  .ptitle h2{font-family:var(--display);font-weight:600;font-size:1.5rem;margin:0;letter-spacing:-.01em}
-  .plain{font-size:1.04rem;color:var(--ink-2);margin:0 0 22px;max-width:60ch}
-  .plain strong{color:var(--ink)}
+  /* ---------- step divider ---------- */
+  .stepwrap{scroll-margin-top:64px}
+  .stephead{padding:50px 0 6px;display:flex;align-items:baseline;gap:16px}
+  .stephead .big{font-family:var(--mono);font-weight:700;font-size:2.4rem;color:var(--coral);line-height:1}
+  .stephead .meta .e{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .stephead .meta h2{font-family:var(--display);font-weight:700;font-size:1.8rem;margin:2px 0 0;letter-spacing:-.01em}
+  .steprule{height:2px;background:var(--ink);margin:14px 0 6px}
 
-  .stage{
-    background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);
-    padding:26px;display:grid;gap:22px;
-  }
-  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-  button.btn{
-    font-family:var(--body);font-weight:600;font-size:.92rem;cursor:pointer;
-    border:1px solid var(--ink);background:var(--ink);color:var(--paper);
-    padding:9px 16px;border-radius:9px;transition:transform .08s ease,background .15s ease;
-  }
-  button.btn:hover{transform:translateY(-1px)}
-  button.btn.ghost{background:transparent;color:var(--ink)}
-  button.btn:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
-  button.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+  /* ---------- lesson blocks ---------- */
+  .lesson{padding:22px 0}
+  .lesson h3{font-family:var(--display);font-weight:600;font-size:1.25rem;margin:0 0 10px}
+  .lesson p{font-size:1.04rem;color:var(--ink-2);margin:0 0 14px;max-width:62ch}
+  .lesson p strong{color:var(--ink)}
+  .lesson ul{color:var(--ink-2);max-width:62ch}
 
-  .code{
-    font-family:var(--mono);font-size:.86rem;background:var(--code-bg);color:var(--code-fg);
-    border-radius:10px;padding:16px 18px;overflow-x:auto;line-height:1.7;margin:0;
-  }
+  .principles{counter-reset:p;display:grid;gap:12px;margin:6px 0 8px;padding:0;list-style:none}
+  .principles li{position:relative;padding:14px 16px 14px 54px;background:var(--paper-2);border:1px solid var(--line);border-radius:12px}
+  .principles li::before{counter-increment:p;content:counter(p);position:absolute;left:14px;top:14px;width:26px;height:26px;border-radius:7px;background:var(--ink);color:var(--paper);font-family:var(--mono);font-weight:700;font-size:.85rem;display:grid;place-items:center}
+  .principles b{font-family:var(--display)}
+
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0}
+  .ccard{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--paper-2)}
+  .ccard .h{font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+  .ccard.bad .h{color:var(--coral)} .ccard.good .h{color:var(--green)}
+  .ccard .q{font-style:italic;color:var(--ink-2)}
+
+  .callout{background:rgba(62,111,168,.08);border:1px solid rgba(62,111,168,.22);border-left:4px solid var(--blue);border-radius:10px;padding:14px 16px;margin:12px 0;font-size:.98rem;color:var(--ink-2)}
+  .callout b{color:var(--blue)}
+  .callout.bridge{background:rgba(255,106,61,.08);border-color:rgba(255,106,61,.25);border-left-color:var(--coral)}
+  .callout.bridge b{color:var(--coral)}
+
+  /* ---------- code blocks + copy ---------- */
+  .codewrap{position:relative;margin:6px 0 16px}
+  .codewrap .copy{position:absolute;top:8px;right:8px;font-family:var(--body);font-weight:600;font-size:.72rem;color:var(--code-fg);background:rgba(255,255,255,.12);border:none;border-radius:6px;padding:5px 9px;cursor:pointer}
+  .codewrap .copy:hover{background:rgba(255,255,255,.22)}
+  .code{font-family:var(--mono);font-size:.86rem;background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:16px 18px;overflow-x:auto;line-height:1.7;margin:0;white-space:pre}
   .code .ln{display:block;border-radius:5px;padding:0 6px;margin:0 -6px;transition:background .25s ease}
   .code .ln.hot{background:rgba(255,106,61,.28)}
-  .code .cmt{color:#7E8CA3}
-  .code .kw{color:#FF9E7A}
-  .code .fn{color:#7FD1A8}
-  .tag{
-    font-family:var(--mono);font-size:.74rem;color:var(--ink-2);
-    background:rgba(62,111,168,.1);border:1px solid rgba(62,111,168,.22);
-    padding:8px 12px;border-radius:8px;line-height:1.5;
-  }
+  .code .cmt{color:#7E8CA3}.code .kw{color:#FF9E7A}.code .fn{color:#7FD1A8}
+
+  /* ---------- link buttons ---------- */
+  .linkrow{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 4px}
+  .linkrow a, button.btn{font-family:var(--body);font-weight:600;font-size:.9rem;text-decoration:none;cursor:pointer;border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:9px;display:inline-flex;align-items:center;gap:7px;transition:transform .08s ease}
+  .linkrow a.alt{background:transparent;color:var(--ink)}
+  .linkrow a:hover, button.btn:hover{transform:translateY(-1px)}
+  button.btn.ghost{background:transparent;color:var(--ink)}
+  button.btn:focus-visible, .linkrow a:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
+  button.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+  /* ---------- concept panels (the four ideas) ---------- */
+  .panel{padding:30px 0;border-bottom:1px solid var(--line)}
+  .panel:last-of-type{border-bottom:none}
+  .phead{display:flex;align-items:flex-start;gap:16px;margin-bottom:18px}
+  .pnum{font-family:var(--mono);font-weight:700;font-size:.95rem;color:var(--paper);background:var(--ink-2);width:40px;height:40px;border-radius:10px;flex:none;display:grid;place-items:center}
+  .ptitle .eyebrow{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:1px 0 3px}
+  .ptitle h4{font-family:var(--display);font-weight:600;font-size:1.3rem;margin:0}
+  .plain{font-size:1rem;color:var(--ink-2);margin:0 0 18px;max-width:60ch}
+  .plain strong{color:var(--ink)}
+  .stage{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);padding:24px;display:grid;gap:20px}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .tag{font-family:var(--mono);font-size:.74rem;color:var(--ink-2);background:rgba(62,111,168,.1);border:1px solid rgba(62,111,168,.22);padding:8px 12px;border-radius:8px;line-height:1.5}
   .tag b{color:var(--blue)}
 
-  /* 01 variable */
-  .varbox{
-    width:170px;margin:6px auto;text-align:center;
-  }
-  .varbox .lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin-bottom:6px}
-  .varbox .box{
-    border:3px solid var(--ink);border-radius:14px;height:120px;display:grid;place-items:center;
-    font-family:var(--mono);font-weight:700;font-size:3rem;color:var(--ink);
-    transition:border-color .25s ease,transform .12s ease;overflow:hidden;
-  }
+  .varbox{width:160px;margin:4px auto;text-align:center}
+  .varbox .lbl{font-family:var(--mono);font-size:.76rem;color:var(--muted);margin-bottom:6px}
+  .varbox .box{border:3px solid var(--ink);border-radius:14px;height:110px;display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:2.8rem;color:var(--ink);transition:border-color .25s ease}
   .varbox .box.pulse{border-color:var(--coral);animation:pop .35s ease}
   @keyframes pop{40%{transform:scale(1.07)}}
-
-  /* 02 conditional */
-  .cond-val{font-family:var(--mono);text-align:center;font-size:1.05rem;margin-bottom:4px}
-  .cond-val b{color:var(--coral);font-size:1.5rem}
+  .cond-val{font-family:var(--mono);text-align:center;font-size:1rem;margin-bottom:4px}
+  .cond-val b{color:var(--coral);font-size:1.4rem}
   input[type=range]{width:100%;accent-color:var(--coral)}
   .branches{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
-  .branch{
-    border:2px solid var(--line);border-radius:12px;padding:16px;text-align:center;
-    transition:all .25s ease;opacity:.45;
-  }
-  .branch .b-h{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin-bottom:6px}
+  .branch{border:2px solid var(--line);border-radius:12px;padding:14px;text-align:center;transition:all .25s ease;opacity:.45}
+  .branch .b-h{font-family:var(--mono);font-size:.76rem;color:var(--muted);margin-bottom:6px}
   .branch .b-msg{font-weight:600}
   .branch.on{opacity:1;transform:translateY(-2px)}
   .branch.on.true{border-color:var(--green);background:rgba(31,182,122,.08)}
   .branch.on.false{border-color:var(--coral);background:rgba(255,106,61,.08)}
-
-  /* 03 loop */
-  .loop-stage{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
-  .wheel{
-    width:120px;height:120px;border-radius:50%;border:4px dashed var(--line);
-    display:grid;place-items:center;position:relative;transition:transform .45s cubic-bezier(.4,0,.2,1);
-  }
-  .wheel .cur{font-family:var(--mono);font-weight:700;font-size:2.4rem;color:var(--ink)}
+  .loop-stage{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+  .wheel{width:108px;height:108px;border-radius:50%;border:4px dashed var(--line);display:grid;place-items:center;transition:transform .45s cubic-bezier(.4,0,.2,1)}
+  .wheel .cur{font-family:var(--mono);font-weight:700;font-size:2.2rem;color:var(--ink)}
   .wheel.spin{border-color:var(--coral)}
-  .console{
-    background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:14px 16px;
-    font-family:var(--mono);font-size:.86rem;min-height:120px;
-  }
+  .console{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:14px 16px;font-family:var(--mono);font-size:.84rem;min-height:108px}
   .console .out{opacity:0;transform:translateY(4px);transition:all .2s ease}
   .console .out.show{opacity:1;transform:none}
   .console .dim{color:var(--muted)}
-
-  /* 04 function */
   .machine{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;text-align:center}
-  .port{font-family:var(--mono)}
-  .port .pl{font-size:.74rem;color:var(--muted);margin-bottom:4px}
-  .port .pv{font-weight:700;font-size:1.5rem;color:var(--ink);min-height:1.5em}
+  .port .pl{font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-bottom:4px}
+  .port .pv{font-family:var(--mono);font-weight:700;font-size:1.4rem;color:var(--ink);min-height:1.4em}
   .port.out .pv{color:var(--green)}
-  .box-fn{
-    background:var(--ink);color:var(--paper);border-radius:12px;padding:18px 14px;
-    font-family:var(--mono);font-weight:600;font-size:.82rem;position:relative;
-  }
-  .box-fn small{display:block;color:var(--coral);font-size:.92rem;margin-top:4px}
-  .arrow{font-size:1.4rem;color:var(--muted)}
-  .token{
-    display:inline-block;font-family:var(--mono);font-weight:700;color:var(--coral);
-    transition:transform .5s ease,opacity .3s ease;
-  }
-  .fn-input{
-    font-family:var(--mono);font-size:1rem;width:110px;padding:8px 10px;
-    border:2px solid var(--ink);border-radius:9px;text-align:center;
-  }
-  .fn-input:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
+  .box-fn{background:var(--ink);color:var(--paper);border-radius:12px;padding:16px 12px;font-family:var(--mono);font-weight:600;font-size:.8rem}
+  .box-fn small{display:block;color:var(--coral);font-size:.9rem;margin-top:4px}
+  .arrow{font-size:1.3rem;color:var(--muted)}
+  .fn-input{font-family:var(--mono);font-size:1rem;width:100px;padding:8px 10px;border:2px solid var(--ink);border-radius:9px;text-align:center}
 
-  /* ---------- journey + downloads ---------- */
-  .journey{padding:48px 0}
-  .journey h3{font-family:var(--display);font-weight:600;font-size:1.5rem;margin:0 0 20px}
-  .steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-  .scard{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
-  .scard .sn{font-family:var(--mono);color:var(--coral);font-weight:700;font-size:.8rem;letter-spacing:.1em}
-  .scard h4{font-family:var(--display);font-weight:600;margin:8px 0 6px;font-size:1.08rem}
-  .scard p{margin:0;font-size:.92rem;color:var(--ink-2)}
+  /* ---------- quiz ---------- */
+  .quiz{background:var(--ink);border-radius:var(--radius);padding:24px;margin:22px 0 6px;color:var(--paper)}
+  .quiz h3{font-family:var(--display);font-weight:600;font-size:1.15rem;margin:0 0 4px;color:var(--paper)}
+  .quiz .qsub{color:#B9C4D2;font-size:.9rem;margin:0 0 16px}
+  .q{margin-bottom:16px}
+  .q .qt{font-weight:600;margin-bottom:8px}
+  .opt{display:block;width:100%;text-align:left;font-family:var(--body);font-size:.92rem;color:var(--paper);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:9px;padding:10px 13px;margin-bottom:7px;cursor:pointer;transition:background .15s ease}
+  .opt:hover{background:rgba(255,255,255,.13)}
+  .opt.correct{background:rgba(31,182,122,.28);border-color:var(--green)}
+  .opt.wrong{background:rgba(255,106,61,.26);border-color:var(--coral)}
+  .opt:disabled{cursor:default}
+  .qscore{font-family:var(--mono);font-weight:700;margin-top:6px;min-height:1.3em;color:var(--green)}
 
-  .dl{margin-top:34px;background:var(--ink);border-radius:var(--radius);padding:26px;color:var(--paper)}
-  .dl h3{font-family:var(--display);font-weight:600;margin:0 0 6px;font-size:1.25rem;color:var(--paper)}
-  .dl p{margin:0 0 18px;color:#B9C4D2;font-size:.95rem}
-  .dl-row{display:flex;flex-wrap:wrap;gap:12px}
-  .dl-row a{
-    font-family:var(--body);font-weight:600;font-size:.92rem;text-decoration:none;
-    background:var(--coral);color:#fff;padding:11px 18px;border-radius:9px;
-    display:inline-flex;align-items:center;gap:8px;transition:transform .08s ease;
-  }
-  .dl-row a.alt{background:transparent;border:1px solid #46607F;color:var(--paper)}
-  .dl-row a:hover{transform:translateY(-1px)}
-
-  footer{padding:30px 0 60px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+  /* ---------- footer ---------- */
+  footer{padding:34px 0 70px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);margin-top:30px}
 
   @media(max-width:680px){
+    .nav-brand{font-size:.72rem}
+    .nav-links a{padding:6px 8px;font-size:.78rem}
+    .compare,.branches{grid-template-columns:1fr}
     .loop-stage{grid-template-columns:1fr;justify-items:center}
-    .steps3{grid-template-columns:1fr}
-    .branches{grid-template-columns:1fr}
-    .machine{grid-template-columns:1fr;gap:14px}
-    .arrow{transform:rotate(90deg)}
+    .machine{grid-template-columns:1fr;gap:14px}.arrow{transform:rotate(90deg)}
   }
-  @media(prefers-reduced-motion:reduce){
-    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 
-<header class="hero">
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-in">
+    <a class="nav-brand" href="#top">Python <b>+</b> AI</a>
+    <div class="nav-links">
+      <a href="#step1"><b>1</b> Learn</a>
+      <a href="#step2"><b>2</b> Code</a>
+      <a href="#step3"><b>3</b> Data</a>
+    </div>
+  </div>
+  <div class="progress" id="progress"></div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
   <div class="wrap">
     <p class="kicker">From Zero to Python with AI</p>
-    <h1>Four ideas.<br><em>One step counter.</em></h1>
-    <p>Every concept below is a building block you'll reuse twice — once on a real micro:bit, once analysing activity data. Play with each one until it clicks.</p>
-    <span class="pedo">today's goal &nbsp;<b id="heroCount">0</b>&nbsp; concepts unlocked</span>
+    <h1><span class="a">Learn smart.</span><br><span class="b">Code fast.</span><br><span class="c">Build with real devices.</span></h1>
+    <p>Three steps, one idea running through all of them — <strong>steps</strong>. You'll write Python with an AI helper, build a step counter on a real micro:bit, then turn step data into insights.</p>
+    <div class="lead-cta">
+      <div class="linkrow">
+        <a href="#step1">Start Step 1 →</a>
+        <a href="#step2" class="alt">micro:bit</a>
+        <a href="#step3" class="alt">Data</a>
+      </div>
+    </div>
   </div>
 </header>
 
-<main class="panels wrap">
+<main class="wrap">
 
-  <!-- 01 VARIABLE -->
-  <section class="panel" data-unlock>
-    <div class="phead">
-      <div class="pnum">01</div>
-      <div class="ptitle">
-        <p class="eyebrow">Variable</p>
-        <h2>A labelled box</h2>
-      </div>
+<!-- =================== STEP 1 =================== -->
+<section class="stepwrap" id="step1">
+  <div class="stephead">
+    <div class="big">01</div>
+    <div class="meta"><div class="e">Learn Smart</div><h2>Python with AI</h2></div>
+  </div>
+  <div class="steprule"></div>
+
+  <!-- 1A what is AI -->
+  <div class="lesson">
+    <h3>What is AI — and why it makes coding easier</h3>
+    <p>An AI helper (like Claude, ChatGPT, Gemini or Copilot) does two things for a beginner: it <strong>turns plain English into Python code</strong>, and it <strong>explains code back to you</strong> in plain English. You don't have to memorise syntax. You learn to ask well and read the answer.</p>
+    <p>Think of it as a fast junior partner, not a magic oracle — it sometimes gets things wrong, which is exactly why we still learn to read code. That's what the rest of Step 1 is for.</p>
+  </div>
+
+  <!-- 1B prompting -->
+  <div class="lesson">
+    <h3>How to ask: writing a good code prompt</h3>
+    <p>A good prompt is the whole skill. Three habits get you most of the way:</p>
+    <ol class="principles">
+      <li><b>Be specific and complete.</b> Say the goal, the inputs, and the output you want. "Count steps and show the total" beats "make a counter".</li>
+      <li><b>Give context and purpose.</b> Tell it you're a beginner and why you need it, so it explains at the right level.</li>
+      <li><b>Ask one thing at a time.</b> Get it working first, then ask for a single improvement.</li>
+    </ol>
+    <div class="compare">
+      <div class="ccard bad"><div class="h">Weak prompt</div><div class="q">"make a counter"</div></div>
+      <div class="ccard good"><div class="h">Strong prompt</div><div class="q">"Write a Python program that counts steps and prints the total. I'm a beginner — explain each line simply."</div></div>
     </div>
-    <p class="plain">A variable is <strong>one box with a label</strong>. It holds a value, and when you put a new value in, the old one is replaced. Here the box is called <code>steps</code>.</p>
+    <div class="callout"><b>Two prompts worth memorising.</b> When you're stuck: <em>"Explain this code line by line, like I'm new."</em> &nbsp;and&nbsp; <em>"What does this error mean and how do I fix it?"</em> These remove the biggest beginner fear — getting stuck alone.</div>
+  </div>
+
+  <!-- 1C the four ideas -->
+  <div class="lesson">
+    <h3>The four ideas you'll reuse everywhere</h3>
+    <p>These four concepts power the whole course. Play with each one — and notice the note at the bottom of each, showing where it returns in Step 2 and Step 3.</p>
+  </div>
+
+  <!-- IDEA 01 VARIABLE -->
+  <section class="panel">
+    <div class="phead"><div class="pnum">01</div><div class="ptitle"><p class="eyebrow">Variable</p><h4>A labelled box</h4></div></div>
+    <p class="plain">A variable is <strong>one box with a label</strong>. Put a new value in and the old one is replaced. Here the box is called <code>steps</code>.</p>
     <div class="stage">
-      <div class="varbox">
-        <div class="lbl">steps</div>
-        <div class="box" id="varBox">0</div>
-      </div>
+      <div class="varbox"><div class="lbl">steps</div><div class="box" id="varBox">0</div></div>
       <div class="controls">
         <button class="btn" id="varStep">Take a step</button>
         <button class="btn ghost" id="varSet">Set to 100</button>
         <button class="btn ghost" id="varReset">Reset to 0</button>
       </div>
-      <pre class="code"><span class="ln" id="vl1"><span class="kw">steps</span> = 0          <span class="cmt"># make the box</span></span><span class="ln" id="vl2"><span class="kw">steps</span> = steps + 1  <span class="cmt"># put a new value in</span></span></pre>
-      <p class="tag"><b>You'll use this:</b> <code>steps = 0</code> is the memory of your micro:bit counter (Step 2) and the running total of your data analyser (Step 3).</p>
+      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="ln" id="vl1"><span class="kw">steps</span> = 0          <span class="cmt"># make the box</span></span><span class="ln" id="vl2"><span class="kw">steps</span> = steps + 1  <span class="cmt"># put a new value in</span></span></pre></div>
+      <p class="tag"><b>Returns in:</b> <code>steps = 0</code> is your micro:bit counter's memory (Step 2) and your data total (Step 3).</p>
     </div>
   </section>
 
-  <!-- 02 CONDITIONAL -->
-  <section class="panel" data-unlock>
-    <div class="phead">
-      <div class="pnum">02</div>
-      <div class="ptitle">
-        <p class="eyebrow">Conditional · if</p>
-        <h2>A fork in the road</h2>
-      </div>
-    </div>
-    <p class="plain">An <strong>if</strong> statement is a fork: the program checks a question and takes one path or the other. Drag the slider and watch which branch lights up.</p>
+  <!-- IDEA 02 CONDITIONAL -->
+  <section class="panel">
+    <div class="phead"><div class="pnum">02</div><div class="ptitle"><p class="eyebrow">Conditional · if</p><h4>A fork in the road</h4></div></div>
+    <p class="plain">An <strong>if</strong> checks a question and takes one path or the other. Drag the slider and watch which branch lights up.</p>
     <div class="stage">
-      <div>
-        <p class="cond-val">steps = <b id="condVal">7</b></p>
-        <input type="range" id="condSlider" min="0" max="20" value="7" />
-      </div>
-      <pre class="code"><span class="ln" id="cl1"><span class="kw">if</span> steps &gt;= 10:</span><span class="ln" id="cl2">    print(<span class="fn">"Great, you're active!"</span>)</span><span class="ln" id="cl3"><span class="kw">else</span>:</span><span class="ln" id="cl4">    print(<span class="fn">"Keep going!"</span>)</span></pre>
+      <div><p class="cond-val">steps = <b id="condVal">7</b></p><input type="range" id="condSlider" min="0" max="20" value="7" /></div>
+      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="ln" id="cl1"><span class="kw">if</span> steps &gt;= 10:</span><span class="ln" id="cl2">    print(<span class="fn">"Great, you're active!"</span>)</span><span class="ln" id="cl3"><span class="kw">else</span>:</span><span class="ln" id="cl4">    print(<span class="fn">"Keep going!"</span>)</span></pre></div>
       <div class="branches">
-        <div class="branch true" id="branchTrue">
-          <div class="b-h">if True</div>
-          <div class="b-msg">Great, you're active!</div>
-        </div>
-        <div class="branch false" id="branchFalse">
-          <div class="b-h">else</div>
-          <div class="b-msg">Keep going!</div>
-        </div>
+        <div class="branch true" id="branchTrue"><div class="b-h">if True</div><div class="b-msg">Great, you're active!</div></div>
+        <div class="branch false" id="branchFalse"><div class="b-h">else</div><div class="b-msg">Keep going!</div></div>
       </div>
-      <p class="tag"><b>You'll use this:</b> <code>if shake: steps += 1</code> counts a step on the micro:bit, and <code>if steps &gt;= 10000:</code> checks your daily goal in Step 3.</p>
+      <p class="tag"><b>Returns in:</b> <code>if shake: steps += 1</code> counts a step (Step 2); <code>if steps &gt;= 10000:</code> checks your goal (Step 3).</p>
     </div>
   </section>
 
-  <!-- 03 LOOP -->
-  <section class="panel" data-unlock>
-    <div class="phead">
-      <div class="pnum">03</div>
-      <div class="ptitle">
-        <p class="eyebrow">Loop · for</p>
-        <h2>Do it again and again</h2>
-      </div>
-    </div>
-    <p class="plain">A loop <strong>repeats</strong> the same lines. <code>range(5)</code> gives the numbers 0, 1, 2, 3, 4 — so the body runs five times. Press <em>Step</em> to walk through it, or <em>Play</em> to run it.</p>
+  <!-- IDEA 03 LOOP -->
+  <section class="panel">
+    <div class="phead"><div class="pnum">03</div><div class="ptitle"><p class="eyebrow">Loop · for</p><h4>Do it again and again</h4></div></div>
+    <p class="plain">A loop <strong>repeats</strong> lines. <code>range(5)</code> gives 0,1,2,3,4 — so the body runs five times. Press Step to walk through it.</p>
     <div class="stage">
-      <pre class="code"><span class="ln" id="ll1"><span class="kw">for</span> step <span class="kw">in</span> range(5):</span><span class="ln" id="ll2">    print(step)</span></pre>
+      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="ln"><span class="kw">for</span> step <span class="kw">in</span> range(5):</span><span class="ln">    print(step)</span></pre></div>
       <div class="loop-stage">
         <div class="wheel" id="loopWheel"><span class="cur" id="loopCur">–</span></div>
         <div class="console" id="loopConsole"><span class="dim">output appears here…</span></div>
@@ -295,152 +278,234 @@
         <button class="btn ghost" id="loopStep">Step</button>
         <button class="btn ghost" id="loopReset">Reset</button>
       </div>
-      <p class="tag"><b>You'll use this:</b> <code>while True:</code> is the micro:bit's forever-loop (Step 2), and <code>for day in week:</code> walks through your step data (Step 3).</p>
+      <p class="tag"><b>Returns in:</b> <code>while True:</code> is the micro:bit's forever-loop (Step 2); <code>for day in week:</code> walks your data (Step 3).</p>
     </div>
   </section>
 
-  <!-- 04 FUNCTION -->
-  <section class="panel" data-unlock>
-    <div class="phead">
-      <div class="pnum">04</div>
-      <div class="ptitle">
-        <p class="eyebrow">Function · def</p>
-        <h2>A little machine</h2>
-      </div>
-    </div>
-    <p class="plain">A function is a <strong>machine</strong>: something goes in, it does one job, a result comes out. This one turns steps into metres walked (about 0.75&nbsp;m per step).</p>
+  <!-- IDEA 04 FUNCTION -->
+  <section class="panel">
+    <div class="phead"><div class="pnum">04</div><div class="ptitle"><p class="eyebrow">Function · def</p><h4>A little machine</h4></div></div>
+    <p class="plain">A function is a <strong>machine</strong>: something goes in, it does one job, a result comes out. This one turns steps into metres (~0.75&nbsp;m per step).</p>
     <div class="stage">
-      <pre class="code"><span class="ln"><span class="kw">def</span> <span class="fn">steps_to_distance</span>(steps):</span><span class="ln" id="fl2">    <span class="kw">return</span> steps * 0.75</span></pre>
+      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="ln"><span class="kw">def</span> <span class="fn">steps_to_distance</span>(steps):</span><span class="ln" id="fl2">    <span class="kw">return</span> steps * 0.75</span></pre></div>
       <div class="machine">
-        <div class="port">
-          <div class="pl">steps in</div>
-          <input class="fn-input" id="fnIn" type="number" value="2000" min="0" />
-        </div>
+        <div class="port"><div class="pl">steps in</div><input class="fn-input" id="fnIn" type="number" value="2000" min="0" /></div>
         <div class="arrow">→</div>
         <div class="box-fn">steps_to_distance()<small id="fnToken">&nbsp;</small></div>
-        <div class="port out">
-          <div class="pl">metres out</div>
-          <div class="pv" id="fnOut">—</div>
-        </div>
+        <div class="port out"><div class="pl">metres out</div><div class="pv" id="fnOut">—</div></div>
       </div>
       <div class="controls"><button class="btn" id="fnRun">Run the machine</button></div>
-      <p class="tag"><b>You'll use this:</b> a reusable <code>summarise()</code> machine turns a week of steps into one plain-English sentence in Step 3.</p>
+      <p class="tag"><b>Returns in:</b> a reusable <code>summarise()</code> machine turns a week of steps into one sentence (Step 3).</p>
     </div>
   </section>
+
+  <div class="lesson">
+    <h3>Try it yourself</h3>
+    <p>Open a free Python editor in your browser, type the snippets above, and ask your AI helper to explain anything that's fuzzy.</p>
+    <div class="linkrow"><a href="https://trinket.io/python" target="_blank" rel="noopener">Open Trinket editor ↗</a><a href="https://pythontutor.com/visualize.html" target="_blank" rel="noopener" class="alt">Visualise code step-by-step ↗</a></div>
+  </div>
+
+  <!-- QUIZ 1 -->
+  <div class="quiz" data-quiz="1"></div>
+</section>
+
+<!-- =================== STEP 2 =================== -->
+<section class="stepwrap" id="step2">
+  <div class="stephead">
+    <div class="big">02</div>
+    <div class="meta"><div class="e">Code Fast</div><h2>micro:bit step counter</h2></div>
+  </div>
+  <div class="steprule"></div>
+
+  <div class="lesson">
+    <h3>Put your code on a real device</h3>
+    <p>The micro:bit is a tiny computer with a built-in <strong>accelerometer</strong> — a motion sensor, the same kind in your phone. We'll use it to count steps. Same Python ideas from Step 1, now running in your hand.</p>
+  </div>
+
+  <div class="lesson">
+    <h3>1 · Connect it</h3>
+    <p>Plug the micro:bit into your laptop with the USB cable. Open the MakeCode editor, click <em>Connect</em> and follow the pairing prompt. Flash the built-in flashing-heart example first — once that shows on the LEDs, you know everything works.</p>
+    <div class="linkrow"><a href="https://makecode.microbit.org" target="_blank" rel="noopener">Open MakeCode ↗</a><a href="https://python.microbit.org" target="_blank" rel="noopener" class="alt">Python editor ↗</a></div>
+    <div class="callout"><b>Beginner tip.</b> Build in MakeCode <em>blocks</em> first, then switch to the <em>Python</em> view. Seeing the same program as blocks and as Python is the moment it clicks: blocks <em>are</em> Python.</div>
+  </div>
+
+  <div class="lesson">
+    <h3>2 · Build the step counter</h3>
+    <p>Here it is — and every line is a Step 1 idea in the wild. Flash it, strap the micro:bit to your ankle or hold it, and walk around the room.</p>
+    <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="kw">from</span> microbit <span class="kw">import</span> *
+
+steps = 0              <span class="cmt"># the variable (a box)</span>
+<span class="kw">while</span> True:            <span class="cmt"># the loop (runs forever)</span>
+    <span class="kw">if</span> accelerometer.was_gesture(<span class="fn">'shake'</span>):  <span class="cmt"># the if (a step happened)</span>
+        steps += 1     <span class="cmt"># add one</span>
+        display.show(steps)</pre></div>
+    <p class="plain">Does the count match your real steps? Almost never exactly — that's a great thing to talk about, and it's what the next part fixes.</p>
+  </div>
+
+  <div class="lesson">
+    <h3>3 · Make it better</h3>
+    <p>Pick any of these. Ask your AI helper to write one, then read its explanation:</p>
+    <ul>
+      <li><strong>Reset button:</strong> <code>if button_b.is_pressed(): steps = 0</code></li>
+      <li><strong>Show distance</strong> (reuse the Step 1 machine): <code>display.scroll(steps * 0.75)</code></li>
+      <li><strong>More accurate</strong> — swap the shake for a raw threshold: <code>if accelerometer.get_y() &gt; 1500:</code> and tune the number.</li>
+    </ul>
+    <div class="callout bridge"><b>Bridge to Step 3.</b> Turn on the micro:bit's <em>data logging</em> to record your steps over time, then download the CSV. In the next step we'll open that exact data in Python.</div>
+    <div class="linkrow"><a href="https://microbit.org/projects/make-it-code-it/step-counter/" target="_blank" rel="noopener">Step counter project ↗</a><a href="https://microbit.org/projects/make-it-code-it/sensitive-step-counter/" target="_blank" rel="noopener" class="alt">Sensitive step counter ↗</a></div>
+  </div>
+
+  <!-- QUIZ 2 -->
+  <div class="quiz" data-quiz="2"></div>
+</section>
+
+<!-- =================== STEP 3 =================== -->
+<section class="stepwrap" id="step3">
+  <div class="stephead">
+    <div class="big">03</div>
+    <div class="meta"><div class="e">Build with Data</div><h2>Step data analyser</h2></div>
+  </div>
+  <div class="steprule"></div>
+
+  <div class="lesson">
+    <h3>From a device to a pile of numbers</h3>
+    <p>In Step 2 your micro:bit <strong>produced</strong> step numbers. Real trackers like Fitbit produce thousands of them. Now you learn to make sense of them — using the same lists, loops and functions from Step 1, no fancy libraries needed to start.</p>
+  </div>
+
+  <div class="lesson">
+    <h3>1 · Get the files</h3>
+    <p>Download a clean week (and a full month) of sample data plus a starter script. Open them in Trinket to code along, or open the notebook in Colab for real charts.</p>
+    <div class="linkrow">
+      <a href="data/step_data.csv" download>↓ step_data.csv</a>
+      <a href="starter.py" download class="alt">↓ starter.py</a>
+      <a href="https://trinket.io/python" target="_blank" rel="noopener" class="alt">Open Trinket ↗</a>
+      <!-- Replace USERNAME with your GitHub username after deploying -->
+      <a href="https://colab.research.google.com/github/USERNAME/python-ai-course/blob/main/step3_analysis.ipynb" target="_blank" rel="noopener" class="alt">Open in Colab ↗</a>
+    </div>
+  </div>
+
+  <div class="lesson">
+    <h3>2 · Analyse it</h3>
+    <p>Start with the data as a <strong>list</strong> (the idea we previewed in Step 1), then squeeze insights out of it. The big numbers first:</p>
+    <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code">days  = [<span class="fn">"Mon"</span>,<span class="fn">"Tue"</span>,<span class="fn">"Wed"</span>,<span class="fn">"Thu"</span>,<span class="fn">"Fri"</span>,<span class="fn">"Sat"</span>,<span class="fn">"Sun"</span>]
+steps = [6200, 8100, 6400, 13420, 7300, 12500, 11200]
+
+<span class="kw">print</span>(<span class="fn">"Total:"</span>, sum(steps))
+<span class="kw">print</span>(<span class="fn">"Average:"</span>, round(sum(steps)/len(steps)))
+<span class="kw">print</span>(<span class="fn">"Best day:"</span>, max(steps))</pre></div>
+    <p class="plain">Then a goal check (the <code>if</code>) and a text bar chart (the <code>for</code> loop) — no chart library required:</p>
+    <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="kw">for</span> i <span class="kw">in</span> range(len(days)):
+    bar = <span class="fn">"#"</span> * (steps[i] // 1000)
+    <span class="kw">print</span>(days[i], bar, steps[i])</pre></div>
+  </div>
+
+  <div class="lesson">
+    <h3>3 · End with the insight, not the code</h3>
+    <p>"Your most active day was Sunday; weekends beat weekdays. What would you change next week?" That's the difference between <strong>running code</strong> and <strong>building with data</strong> — the numbers become a decision.</p>
+    <div class="callout bridge"><b>Make it yours.</b> Swap in your own micro:bit data log from Step 2, or your real Fitbit / Google Health export. The same code works on all of them.</div>
+  </div>
+
+  <!-- QUIZ 3 -->
+  <div class="quiz" data-quiz="3"></div>
+</section>
 
 </main>
 
-<!-- JOURNEY + DOWNLOADS -->
-<section class="journey wrap">
-  <h3>Your three-step journey</h3>
-  <div class="steps3">
-    <div class="scard"><div class="sn">STEP 1</div><h4>Learn Smart</h4><p>Write &amp; explain Python with an AI helper — using the four ideas above.</p></div>
-    <div class="scard"><div class="sn">STEP 2</div><h4>Code Fast</h4><p>Build a real step counter on a micro:bit that you wear and test.</p></div>
-    <div class="scard"><div class="sn">STEP 3</div><h4>Build with Data</h4><p>Turn a week of step data into totals, goals and insights.</p></div>
-  </div>
-
-  <div class="dl">
-    <h3>Class files</h3>
-    <p>Download these for Step 3, code along in the Trinket editor, or open the full notebook in Colab.</p>
-    <div class="dl-row">
-      <a href="data/step_data.csv" download>↓ step_data.csv</a>
-      <a href="starter.py" download class="alt">↓ starter.py</a>
-      <a href="https://trinket.io/python" target="_blank" rel="noopener" class="alt">Open Trinket editor ↗</a>
-      <!-- Replace USERNAME below with your GitHub username after deploying -->
-      <a href="https://colab.research.google.com/github/USERNAME/python-ai-course/blob/main/step3_analysis.ipynb" target="_blank" rel="noopener" class="alt">Open Step 3 in Colab ↗</a>
-    </div>
-  </div>
-</section>
-
-<footer class="wrap">From Zero to Python with AI · interactive concept playground · free to host on GitHub Pages.</footer>
+<footer class="wrap">From Zero to Python with AI · learn smart, code fast, build with real devices · free to host on GitHub Pages.</footer>
 
 <script>
 (function(){
   "use strict";
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---- unlock counter in hero ---- */
-  var unlocked = 0, heroCount = document.getElementById('heroCount');
-  var seen = new Set();
-  function unlock(el){
-    if(seen.has(el)) return; seen.add(el);
-    unlocked++; if(heroCount) heroCount.textContent = unlocked;
-  }
-  if('IntersectionObserver' in window){
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){ if(e.isIntersecting) unlock(e.target); });
-    },{threshold:.4});
-    document.querySelectorAll('[data-unlock]').forEach(function(p){ io.observe(p); });
-  } else {
-    document.querySelectorAll('[data-unlock]').forEach(unlock);
-  }
+  /* ---- scroll progress ---- */
+  var bar=document.getElementById('progress');
+  function prog(){var h=document.documentElement;var p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);bar.style.width=(p*100)+'%';}
+  document.addEventListener('scroll',prog,{passive:true}); prog();
+
+  /* ---- copy buttons ---- */
+  document.querySelectorAll('[data-copy]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var pre=btn.parentElement.querySelector('.code');
+      var text=pre.innerText;
+      if(navigator.clipboard){navigator.clipboard.writeText(text).then(function(){
+        var old=btn.textContent; btn.textContent='Copied!';
+        setTimeout(function(){btn.textContent=old;},1200);
+      });}
+    });
+  });
 
   /* ===== 01 VARIABLE ===== */
   var vBox=document.getElementById('varBox'), vl2=document.getElementById('vl2');
-  function setVar(v,hot){
-    vBox.textContent=v;
-    vBox.classList.remove('pulse'); void vBox.offsetWidth; vBox.classList.add('pulse');
-    if(hot){ vl2.classList.add('hot'); setTimeout(function(){vl2.classList.remove('hot');},600); }
-  }
-  document.getElementById('varStep').onclick=function(){ setVar((+vBox.textContent||0)+1,true); };
-  document.getElementById('varSet').onclick =function(){ setVar(100,false); };
-  document.getElementById('varReset').onclick=function(){ setVar(0,false); };
+  function setVar(v,hot){vBox.textContent=v;vBox.classList.remove('pulse');void vBox.offsetWidth;vBox.classList.add('pulse');if(hot){vl2.classList.add('hot');setTimeout(function(){vl2.classList.remove('hot');},600);}}
+  document.getElementById('varStep').onclick=function(){setVar((+vBox.textContent||0)+1,true);};
+  document.getElementById('varSet').onclick=function(){setVar(100,false);};
+  document.getElementById('varReset').onclick=function(){setVar(0,false);};
 
   /* ===== 02 CONDITIONAL ===== */
-  var slider=document.getElementById('condSlider'),
-      cVal=document.getElementById('condVal'),
-      bT=document.getElementById('branchTrue'), bF=document.getElementById('branchFalse'),
-      cl2=document.getElementById('cl2'), cl4=document.getElementById('cl4');
-  function evalCond(){
-    var v=+slider.value; cVal.textContent=v;
-    var isTrue = v>=10;
-    bT.classList.toggle('on',isTrue); bF.classList.toggle('on',!isTrue);
-    cl2.classList.toggle('hot',isTrue); cl4.classList.toggle('hot',!isTrue);
-  }
+  var slider=document.getElementById('condSlider'),cVal=document.getElementById('condVal'),
+      bT=document.getElementById('branchTrue'),bF=document.getElementById('branchFalse'),
+      cl2=document.getElementById('cl2'),cl4=document.getElementById('cl4');
+  function evalCond(){var v=+slider.value;cVal.textContent=v;var t=v>=10;bT.classList.toggle('on',t);bF.classList.toggle('on',!t);cl2.classList.toggle('hot',t);cl4.classList.toggle('hot',!t);}
   slider.addEventListener('input',evalCond); evalCond();
 
   /* ===== 03 LOOP ===== */
-  var wheel=document.getElementById('loopWheel'), cur=document.getElementById('loopCur'),
-      con=document.getElementById('loopConsole'), N=5, i=0, playing=false, spin=0;
-  var bStep=document.getElementById('loopStep'), bPlay=document.getElementById('loopPlay'),
-      bReset=document.getElementById('loopReset');
-  function resetLoop(){
-    i=0; playing=false; spin=0; cur.textContent='–';
-    wheel.style.transform='rotate(0deg)'; wheel.classList.remove('spin');
-    con.innerHTML='<span class="dim">output appears here…</span>';
-    bStep.disabled=false; bPlay.disabled=false;
-  }
-  function tick(){
-    if(i>=N){ playing=false; bStep.disabled=true; bPlay.disabled=true; wheel.classList.remove('spin'); return false; }
-    if(i===0) con.innerHTML='';
-    cur.textContent=i; spin+=72; if(!reduce) wheel.style.transform='rotate('+spin+'deg)';
-    wheel.classList.add('spin');
-    var line=document.createElement('div'); line.className='out'; line.textContent='print('+i+')  →  '+i;
-    con.appendChild(line); requestAnimationFrame(function(){ line.classList.add('show'); });
-    i++;
-    if(i>=N){ bStep.disabled=true; bPlay.disabled=true; }
-    return true;
-  }
-  bStep.onclick=function(){ if(!playing) tick(); };
+  var wheel=document.getElementById('loopWheel'),cur=document.getElementById('loopCur'),
+      con=document.getElementById('loopConsole'),N=5,i=0,playing=false,spin=0;
+  var bStep=document.getElementById('loopStep'),bPlay=document.getElementById('loopPlay'),bReset=document.getElementById('loopReset');
+  function resetLoop(){i=0;playing=false;spin=0;cur.textContent='–';wheel.style.transform='rotate(0deg)';wheel.classList.remove('spin');con.innerHTML='<span class="dim">output appears here…</span>';bStep.disabled=false;bPlay.disabled=false;}
+  function tick(){if(i>=N){playing=false;bStep.disabled=true;bPlay.disabled=true;wheel.classList.remove('spin');return false;}if(i===0)con.innerHTML='';cur.textContent=i;spin+=72;if(!reduce)wheel.style.transform='rotate('+spin+'deg)';wheel.classList.add('spin');var line=document.createElement('div');line.className='out';line.textContent='print('+i+')  →  '+i;con.appendChild(line);requestAnimationFrame(function(){line.classList.add('show');});i++;if(i>=N){bStep.disabled=true;bPlay.disabled=true;}return true;}
+  bStep.onclick=function(){if(!playing)tick();};
   bReset.onclick=resetLoop;
-  bPlay.onclick=function(){
-    if(playing) return; if(i>=N) resetLoop();
-    playing=true; bStep.disabled=true; bPlay.disabled=true;
-    var iv=setInterval(function(){ if(!tick()){ clearInterval(iv); } },reduce?120:650);
-  };
+  bPlay.onclick=function(){if(playing)return;if(i>=N)resetLoop();playing=true;bStep.disabled=true;bPlay.disabled=true;var iv=setInterval(function(){if(!tick())clearInterval(iv);},reduce?120:650);};
 
   /* ===== 04 FUNCTION ===== */
-  var fnIn=document.getElementById('fnIn'), fnOut=document.getElementById('fnOut'),
-      fnTok=document.getElementById('fnToken'), fl2=document.getElementById('fl2');
-  document.getElementById('fnRun').onclick=function(){
-    var s=Math.max(0,+fnIn.value||0), m=Math.round(s*0.75);
-    fl2.classList.add('hot'); fnTok.textContent='×0.75';
-    fnOut.textContent='—';
-    setTimeout(function(){
-      fnOut.textContent=m+' m';
-      fl2.classList.remove('hot'); fnTok.textContent='\u00a0';
-    }, reduce?0:520);
+  var fnIn=document.getElementById('fnIn'),fnOut=document.getElementById('fnOut'),fnTok=document.getElementById('fnToken'),fl2=document.getElementById('fl2');
+  document.getElementById('fnRun').onclick=function(){var s=Math.max(0,+fnIn.value||0),m=Math.round(s*0.75);fl2.classList.add('hot');fnTok.textContent='×0.75';fnOut.textContent='—';setTimeout(function(){fnOut.textContent=m+' m';fl2.classList.remove('hot');fnTok.textContent='\u00a0';},reduce?0:520);};
+
+  /* ===== QUIZZES ===== */
+  var QUIZZES={
+    "1":{title:"Checkpoint 1 — Python with AI",sub:"Three quick questions before you move on.",qs:[
+      {q:"A variable is best described as…",o:["a colour on screen","a labelled box that stores a value","an error message"],a:1},
+      {q:"After steps = 0 then steps = steps + 1 twice, steps is…",o:["0","1","2"],a:2},
+      {q:"Which is the better prompt for a beginner?",o:["\u201cmake code\u201d","\u201cWrite a Python program that counts steps and prints the total, explained simply\u201d"],a:1}
+    ]},
+    "2":{title:"Checkpoint 2 — micro:bit",sub:"You've built the counter — let's check it stuck.",qs:[
+      {q:"Which sensor detects movement on the micro:bit?",o:["temperature sensor","accelerometer","light sensor"],a:1},
+      {q:"What does while True: mean?",o:["run once","keep running / repeat forever","stop the program"],a:1},
+      {q:"Which line actually counts a step?",o:["steps = 0","if shake \u2192 steps += 1","display.show(steps)"],a:1}
+    ]},
+    "3":{title:"Checkpoint 3 — Step data analyser",sub:"Last check — you're nearly there.",qs:[
+      {q:"A list stores…",o:["one value","many values in order","only words"],a:1},
+      {q:"What does sum(steps) give you?",o:["the biggest value","the number of days","all the steps added together"],a:2},
+      {q:"To check if a day beat 10,000 steps, you use…",o:["a print","an if statement","a list"],a:1}
+    ]}
   };
+  document.querySelectorAll('.quiz').forEach(function(box){
+    var data=QUIZZES[box.getAttribute('data-quiz')]; if(!data)return;
+    var done=0,right=0,total=data.qs.length;
+    var html='<h3>'+data.title+'</h3><p class="qsub">'+data.sub+'</p>';
+    data.qs.forEach(function(item,qi){
+      html+='<div class="q" data-qi="'+qi+'"><div class="qt">'+(qi+1)+'. '+item.q+'</div>';
+      item.o.forEach(function(opt,oi){html+='<button class="opt" data-oi="'+oi+'">'+opt+'</button>';});
+      html+='</div>';
+    });
+    html+='<div class="qscore"></div>';
+    box.innerHTML=html;
+    box.querySelectorAll('.q').forEach(function(qEl){
+      var qi=+qEl.getAttribute('data-qi'),ans=data.qs[qi].a,locked=false;
+      qEl.querySelectorAll('.opt').forEach(function(opt){
+        opt.addEventListener('click',function(){
+          if(locked)return; locked=true;
+          var oi=+opt.getAttribute('data-oi');
+          qEl.querySelectorAll('.opt').forEach(function(o){o.disabled=true;});
+          if(oi===ans){opt.classList.add('correct');right++;}
+          else{opt.classList.add('wrong');qEl.querySelector('.opt[data-oi="'+ans+'"]').classList.add('correct');}
+          done++;
+          if(done===total){box.querySelector('.qscore').textContent='Score: '+right+' / '+total+(right===total?'  \ud83c\udf89':'');}
+        });
+      });
+    });
+  });
 })();
 </script>
 </body>
