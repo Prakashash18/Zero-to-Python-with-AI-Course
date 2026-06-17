@@ -161,7 +161,7 @@
 
   /* prompt highlight + info icons */
   .promptbox{font-style:italic;color:var(--ink-2);line-height:1.9}
-  .hl{font-style:normal;border-radius:5px;padding:1px 5px;font-weight:500;white-space:nowrap}
+  .hl{font-style:normal;border-radius:5px;padding:1px 5px;font-weight:500;white-space:normal;overflow-wrap:break-word;-webkit-box-decoration-break:clone;box-decoration-break:clone}
   .hl.g{background:rgba(31,182,122,.18);box-shadow:inset 0 -2px var(--green)}
   .hl.c{background:rgba(62,111,168,.16);box-shadow:inset 0 -2px var(--blue)}
   .hl.p{background:rgba(255,106,61,.16);box-shadow:inset 0 -2px var(--coral)}
@@ -329,6 +329,8 @@
   .walker .leg.b{animation:legB .9s ease-in-out infinite}
   .walker .arm.a{animation:armA .9s ease-in-out infinite}
   .walker .arm.b{animation:armB .9s ease-in-out infinite}
+  .walker .ankle{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:15px;height:11px;background:#16263A;border:1px solid #0b1420;border-radius:3px;box-shadow:0 0 0 2px rgba(255,106,61,.3)}
+  .walker .ankle::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:1px;background:var(--coral)}
   @keyframes legA{0%,100%{transform:rotate(24deg)}50%{transform:rotate(-24deg)}}
   @keyframes legB{0%,100%{transform:rotate(-24deg)}50%{transform:rotate(24deg)}}
   @keyframes armA{0%,100%{transform:rotate(-20deg)}50%{transform:rotate(20deg)}}
@@ -408,6 +410,32 @@
   .tiltcard .tlab{font-weight:700;font-size:.88rem;color:var(--ink);margin-top:8px}
   .tiltcard .tsub{font-size:.76rem;color:var(--muted)}
 
+  /* line-by-line code execution walkthrough */
+  .walk{margin-top:14px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--code-bg)}
+  .walk-code{position:relative;padding:14px 16px 90px 14px;font-family:var(--mono);font-size:.9rem;line-height:1.95;color:var(--code-fg)}
+  .wl{position:relative;white-space:pre;padding-left:20px;border-radius:6px;transition:background .2s}
+  .wl .ptr{position:absolute;left:0;color:var(--coral);opacity:0;transition:opacity .2s;font-size:.78rem;top:3px}
+  .wl.active{background:rgba(255,106,61,.16)}
+  .wl.active .ptr{opacity:1}
+  .walk .tok{border-radius:4px;padding:0 2px}
+  .walk .tok.box{outline:2px solid var(--coral);background:rgba(255,106,61,.22);box-shadow:0 0 0 3px rgba(255,106,61,.14);animation:pop .35s ease}
+  .walk-pop{position:absolute;max-width:300px;background:#fff;color:var(--ink-2);border:1.5px solid var(--coral);border-radius:9px;padding:9px 12px;font-family:var(--body);font-size:.85rem;line-height:1.45;box-shadow:0 8px 20px rgba(0,0,0,.22);z-index:3;animation:pop .3s ease}
+  .walk-pop::before{content:"";position:absolute;top:-7px;left:16px;width:12px;height:12px;background:#fff;border-left:1.5px solid var(--coral);border-top:1.5px solid var(--coral);transform:rotate(45deg)}
+  .walk-out{padding:10px 16px;font-family:var(--mono);font-size:.82rem;color:#CFE8D8;min-height:1.4em;border-top:1px solid rgba(255,255,255,.08)}
+  .walk-out .dim{color:#7f8ea0}
+  .walk-out .out{opacity:0;transform:translateY(3px);transition:all .25s}
+  .walk-out .out.show{opacity:1;transform:none}
+  .walk-ctrl{display:flex;align-items:center;gap:9px;padding:10px 12px;background:#10202F;border-top:1px solid rgba(255,255,255,.08)}
+  .walk-ctrl button{font-family:var(--body);font-weight:700;font-size:.82rem;border-radius:8px;padding:8px 15px;cursor:pointer;border:none}
+  .walk-step{background:var(--coral);color:#fff}
+  .walk-play,.walk-reset{background:rgba(255,255,255,.14);color:#fff}
+  .walk-ctrl button:disabled{opacity:.4;cursor:default}
+  .walk-prog{font-family:var(--mono);font-size:.74rem;color:#9FB0C2;margin-left:auto}
+
+  /* big section intro */
+  .bigintro{font-family:var(--display);font-weight:700;font-size:clamp(2.1rem,8vw,3.4rem);line-height:1.06;letter-spacing:-.02em;color:var(--ink);margin:8px 0 16px}
+  .bigintro .accent{color:var(--coral)}
+
   /* quiz */
   .quiz{background:var(--ink);border-radius:var(--radius);padding:24px;margin-top:14px;color:var(--paper)}
   .quiz h3{font-family:var(--display);font-weight:600;font-size:1.15rem;margin:0 0 4px;color:var(--paper)}
@@ -476,7 +504,7 @@
           <span class="seg head"></span>
           <span class="seg body"></span>
           <span class="seg arm a"></span>
-          <span class="seg leg a"></span>
+          <span class="seg leg a"><span class="ankle"></span></span>
         </div>
         <div class="pedo2"><div class="big" id="walkCount">0</div><div class="lab">steps counted</div></div>
       </div>
@@ -521,24 +549,6 @@
       <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/LPZh9BOjkQs" title="Large Language Models explained briefly — 3Blue1Brown" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
     </section>
 
-    <!-- Huawei AI course promo -->
-    <section class="chunk" data-step="1">
-      <p class="eyebrow">Step 1 · Go further</p>
-      <h2 class="ch">Want to go deeper into AI?</h2>
-      <p>Once you're comfortable here, Huawei's ICT Academy has a free, self-paced course to take your understanding of AI further — great for curious students.</p>
-      <div class="promo">
-        <div class="promo-top"><div class="brand">Huawei ICT Academy</div><h3>Learn more about AI</h3><span class="freebadge">FREE · SELF-PACED · CERTIFICATE</span></div>
-        <div class="promo-body">
-          <ul>
-            <li>Beginner-friendly intro to AI ideas and real-world uses</li>
-            <li>Learn online at your own pace — free to start</li>
-            <li>Earn a certificate of completion (free Huawei ID sign-up)</li>
-          </ul>
-          <a class="cta" href="https://e.huawei.com/en/talent/ict-academy/#/ict-courses-detail?courseId=KhelT9lSqP4ajdYyrOGcHy8yvA8" target="_blank" rel="noopener">Explore the AI course ↗</a>
-        </div>
-      </div>
-    </section>
-
     <!-- C2 — Prompting -->
     <section class="chunk" data-step="1">
       <p class="eyebrow">Step 1 · Learn Smart</p>
@@ -559,6 +569,31 @@
         <span><i style="background:var(--coral)"></i> purpose</span>
       </div>
       <div class="callout"><b>Two prompts worth memorising.</b> <em>"Explain this code line by line, like I'm new."</em> and <em>"What does this error mean and how do I fix it?"</em></div>
+    </section>
+
+    <!-- Huawei AI course promo (after prompting) -->
+    <section class="chunk" data-step="1">
+      <p class="eyebrow">Step 1 · Go further</p>
+      <h2 class="ch">Want to go deeper into AI?</h2>
+      <p>Once you're comfortable here, Huawei's ICT Academy has a free, self-paced course to take your understanding of AI further — great for curious students.</p>
+      <div class="promo">
+        <div class="promo-top"><div class="brand">Huawei ICT Academy</div><h3>Learn more about AI</h3><span class="freebadge">FREE · SELF-PACED · CERTIFICATE</span></div>
+        <div class="promo-body">
+          <ul>
+            <li>Beginner-friendly intro to AI ideas and real-world uses</li>
+            <li>Learn online at your own pace — free to start</li>
+            <li>Earn a certificate of completion (free Huawei ID sign-up)</li>
+          </ul>
+          <a class="cta" href="https://e.huawei.com/en/talent/ict-academy/#/ict-courses-detail?courseId=KhelT9lSqP4ajdYyrOGcHy8yvA8" target="_blank" rel="noopener">Explore the AI course ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Big concepts intro -->
+    <section class="chunk" data-step="1">
+      <p class="eyebrow">Step 1 · The building blocks</p>
+      <h1 class="bigintro">4 ideas.<br>That's the<br><span class="accent">whole language.</span></h1>
+      <p class="lead">Variables, conditionals, loops and functions. Almost every program — your micro:bit step counter, your data analysis, even the AI you just chatted with — is built from these four. Learn them once, and you'll spot them everywhere.</p>
     </section>
 
     <!-- C3 — Four ideas intro -->
@@ -827,13 +862,16 @@ print("done")</textarea>
     <!-- For loop — try 1 of 4 -->
     <section class="chunk" data-step="1">
       <p class="eyebrow">Idea 03 · for · 1 of 4</p>
-      <h2 class="ch">What will this print?</h2>
-      <p><code>range(3)</code> gives the numbers 0, 1, 2.</p>
-      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="kw">for</span> i <span class="kw">in</span> range(3):
-    print(i)</pre></div>
-      <div class="predict">
-        <button class="btn reveal-btn" type="button">Show answer</button>
-        <div class="answer">It prints <span class="out">0</span> <span class="out">1</span> <span class="out">2</span> on separate lines — the loop body runs once for each number.</div>
+      <h2 class="ch">Watch it run, line by line</h2>
+      <p>Tap <b>Step ▶</b> to walk through the loop one move at a time. The arrow shows the running line, the box marks what's happening, and the note explains it.</p>
+      <div class="walk" id="walkFor">
+        <div class="walk-code">
+          <div class="wl" data-line="0"><span class="ptr">▶</span><span class="kw">for</span> <span class="tok" data-tok="fi">i</span> <span class="kw">in</span> <span class="tok" data-tok="fr">range(3)</span>:</div>
+          <div class="wl" data-line="1"><span class="ptr">▶</span>    <span class="tok" data-tok="fp">print</span>(<span class="tok" data-tok="fi2">i</span>)</div>
+          <div class="walk-pop" hidden></div>
+        </div>
+        <div class="walk-out"><span class="dim">output appears here…</span></div>
+        <div class="walk-ctrl"><button class="walk-step" type="button">Step ▶</button><button class="walk-play" type="button">Play</button><button class="walk-reset" type="button">Reset</button><span class="walk-prog"></span></div>
       </div>
     </section>
 
@@ -901,15 +939,18 @@ print(total)</pre></div>
     <!-- While loop — try 1 of 4 -->
     <section class="chunk" data-step="1">
       <p class="eyebrow">Idea 03 · while · 1 of 4</p>
-      <h2 class="ch">What will this print?</h2>
-      <p>A <code>while</code> loop keeps going as long as its condition is true.</p>
-      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code">n = 1
-<span class="kw">while</span> n &lt;= 3:
-    print(n)
-    n = n + 1</pre></div>
-      <div class="predict">
-        <button class="btn reveal-btn" type="button">Show answer</button>
-        <div class="answer">It prints <span class="out">1</span> <span class="out">2</span> <span class="out">3</span>. Once n becomes 4, <code>n &lt;= 3</code> is False and the loop stops.</div>
+      <h2 class="ch">Watch it run, line by line</h2>
+      <p>Step through and watch the condition get checked each time — until it finally turns False and the loop stops.</p>
+      <div class="walk" id="walkWhile">
+        <div class="walk-code">
+          <div class="wl" data-line="0"><span class="ptr">▶</span><span class="tok" data-tok="wn0">n</span> = 1</div>
+          <div class="wl" data-line="1"><span class="ptr">▶</span><span class="kw">while</span> <span class="tok" data-tok="wc">n &lt;= 3</span>:</div>
+          <div class="wl" data-line="2"><span class="ptr">▶</span>    <span class="tok" data-tok="wp">print</span>(n)</div>
+          <div class="wl" data-line="3"><span class="ptr">▶</span>    <span class="tok" data-tok="wn3">n</span> = n + 1</div>
+          <div class="walk-pop" hidden></div>
+        </div>
+        <div class="walk-out"><span class="dim">output appears here…</span></div>
+        <div class="walk-ctrl"><button class="walk-step" type="button">Step ▶</button><button class="walk-play" type="button">Play</button><button class="walk-reset" type="button">Reset</button><span class="walk-prog"></span></div>
       </div>
       <div class="edrow">
         <div class="controls"><button class="btn ghost edopen" type="button">▶ Open Python editor — try it</button></div>
@@ -983,15 +1024,18 @@ print(<span class="fn">"done"</span>)</pre></div>
     <!-- Function — try 1 of 4 -->
     <section class="chunk" data-step="1">
       <p class="eyebrow">Idea 04 · Function · 1 of 4</p>
-      <h2 class="ch">What comes out?</h2>
-      <p>We build a little machine called <code>double</code>, then feed it 5.</p>
-      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="kw">def</span> <span class="fn">double</span>(n):
-    <span class="kw">return</span> n * 2
-
-print(double(5))</pre></div>
-      <div class="predict">
-        <button class="btn reveal-btn" type="button">Show answer</button>
-        <div class="answer">It prints <span class="out">10</span>. The 5 goes in as <code>n</code>, the machine returns <code>5 * 2</code>, and we print the result.</div>
+      <h2 class="ch">Watch it run, line by line</h2>
+      <p>Step through to see how a value goes <em>into</em> the machine and a result comes back <em>out</em>.</p>
+      <div class="walk" id="walkFn">
+        <div class="walk-code">
+          <div class="wl" data-line="0"><span class="ptr">▶</span><span class="kw">def</span> <span class="tok" data-tok="fd">double</span>(<span class="tok" data-tok="fn0">n</span>):</div>
+          <div class="wl" data-line="1"><span class="ptr">▶</span>    <span class="kw">return</span> <span class="tok" data-tok="fr1">n * 2</span></div>
+          <div class="wl" data-line="2"><span class="ptr">▶</span> </div>
+          <div class="wl" data-line="3"><span class="ptr">▶</span><span class="tok" data-tok="fc">print(double(5))</span></div>
+          <div class="walk-pop" hidden></div>
+        </div>
+        <div class="walk-out"><span class="dim">output appears here…</span></div>
+        <div class="walk-ctrl"><button class="walk-step" type="button">Step ▶</button><button class="walk-play" type="button">Play</button><button class="walk-reset" type="button">Reset</button><span class="walk-prog"></span></div>
       </div>
     </section>
 
@@ -1343,14 +1387,120 @@ steps = 0              <span class="cmt"># the variable (a box)</span>
     <section class="chunk" data-step="3">
       <p class="eyebrow">Step 3 · Build with Data</p>
       <h2 class="ch">From a device to a pile of numbers</h2>
-      <p>In Step 2 your micro:bit <strong>produced</strong> step numbers. Real trackers produce thousands. Now you make sense of them — with the same lists, loops and functions from Step 1.</p>
+      <p>In Step 2 your micro:bit <strong>produced</strong> step numbers. Real trackers produce thousands. Now you make sense of them — with the same lists, loops and functions from Step 1. We'll build it up one line at a time, and you can run every step.</p>
     </section>
 
-    <!-- C16 — Get files -->
+    <!-- Step 3 · data -->
     <section class="chunk" data-step="3">
       <p class="eyebrow">Step 3 · Build with Data</p>
-      <h2 class="ch">1 · Get the files</h2>
-      <p>Download the sample data and starter script. Open in Trinket to code along, or in Colab for real charts.</p>
+      <h2 class="ch">1 · Start with the data</h2>
+      <p>A tracker gives you one number per day. Here's one week as two <strong>lists</strong> — the day names, and the steps — the same kind of list from Step 1.</p>
+      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code">days  = [<span class="fn">"Mon"</span>,<span class="fn">"Tue"</span>,<span class="fn">"Wed"</span>,<span class="fn">"Thu"</span>,<span class="fn">"Fri"</span>,<span class="fn">"Sat"</span>,<span class="fn">"Sun"</span>]
+steps = [6200, 8100, 6400, 9100, 7300, 15630, 13200]
+
+<span class="kw">print</span>(steps)
+<span class="kw">print</span>(<span class="fn">"Days recorded:"</span>, len(steps))</pre></div>
+      <div class="edrow">
+        <div class="controls"><button class="btn ghost edopen" type="button">▶ Open Python editor — run it</button></div>
+        <div class="editor" hidden>
+          <textarea class="ed-code" spellcheck="false">days  = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+steps = [6200, 8100, 6400, 9100, 7300, 15630, 13200]
+
+print(steps)
+print("Days recorded:", len(steps))</textarea>
+          <div class="ed-bar"><button class="btn ed-run" type="button">Run ▶</button><span class="ed-status"></span></div>
+          <pre class="ed-out"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 3 · totals -->
+    <section class="chunk" data-step="3">
+      <p class="eyebrow">Step 3 · Build with Data</p>
+      <h2 class="ch">2 · Total and average</h2>
+      <p><code>sum()</code> adds every number in the list; <code>len()</code> counts them. Divide to get the average, and <code>round()</code> tidies the decimal.</p>
+      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code">steps = [6200, 8100, 6400, 9100, 7300, 15630, 13200]
+
+<span class="kw">print</span>(<span class="fn">"Total:"</span>, sum(steps))
+<span class="kw">print</span>(<span class="fn">"Average:"</span>, round(sum(steps) / len(steps)))</pre></div>
+      <div class="edrow">
+        <div class="controls"><button class="btn ghost edopen" type="button">▶ Open Python editor — run it</button></div>
+        <div class="editor" hidden>
+          <textarea class="ed-code" spellcheck="false">steps = [6200, 8100, 6400, 9100, 7300, 15630, 13200]
+
+print("Total:", sum(steps))
+print("Average:", round(sum(steps) / len(steps)))</textarea>
+          <div class="ed-bar"><button class="btn ed-run" type="button">Run ▶</button><span class="ed-status"></span></div>
+          <pre class="ed-out"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 3 · best day -->
+    <section class="chunk" data-step="3">
+      <p class="eyebrow">Step 3 · Build with Data</p>
+      <h2 class="ch">3 · Best, worst — and which day</h2>
+      <p><code>max()</code> and <code>min()</code> find the biggest and smallest. But a number alone isn't the story — <code>.index()</code> finds <em>where</em> it sits, so we can read the matching day.</p>
+      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code">days  = [<span class="fn">"Mon"</span>,<span class="fn">"Tue"</span>,<span class="fn">"Wed"</span>,<span class="fn">"Thu"</span>,<span class="fn">"Fri"</span>,<span class="fn">"Sat"</span>,<span class="fn">"Sun"</span>]
+steps = [6200, 8100, 6400, 9100, 7300, 15630, 13200]
+
+<span class="kw">print</span>(<span class="fn">"Best:"</span>, max(steps), <span class="fn">" Worst:"</span>, min(steps))
+best = steps.index(max(steps))
+<span class="kw">print</span>(<span class="fn">"Best day:"</span>, days[best])</pre></div>
+      <div class="edrow">
+        <div class="controls"><button class="btn ghost edopen" type="button">▶ Open Python editor — run it</button></div>
+        <div class="editor" hidden>
+          <textarea class="ed-code" spellcheck="false">days  = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+steps = [6200, 8100, 6400, 9100, 7300, 15630, 13200]
+
+print("Best:", max(steps), " Worst:", min(steps))
+best = steps.index(max(steps))
+print("Best day:", days[best])</textarea>
+          <div class="ed-bar"><button class="btn ed-run" type="button">Run ▶</button><span class="ed-status"></span></div>
+          <pre class="ed-out"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 3 · chart -->
+    <section class="chunk" data-step="3">
+      <p class="eyebrow">Step 3 · Build with Data</p>
+      <h2 class="ch">4 · Draw a quick chart</h2>
+      <p>A <code>for</code> loop can turn each number into a row of <code>#</code> marks — a bar chart with no chart library at all. (<code>// 1000</code> means "one # per 1000 steps".)</p>
+      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code">days  = [<span class="fn">"Mon"</span>,<span class="fn">"Tue"</span>,<span class="fn">"Wed"</span>,<span class="fn">"Thu"</span>,<span class="fn">"Fri"</span>,<span class="fn">"Sat"</span>,<span class="fn">"Sun"</span>]
+steps = [6200, 8100, 6400, 9100, 7300, 15630, 13200]
+
+<span class="kw">for</span> i <span class="kw">in</span> range(len(days)):
+    bar = <span class="fn">"#"</span> * (steps[i] // 1000)
+    <span class="kw">print</span>(days[i], bar, steps[i])</pre></div>
+      <div class="edrow">
+        <div class="controls"><button class="btn ghost edopen" type="button">▶ Open Python editor — run it</button></div>
+        <div class="editor" hidden>
+          <textarea class="ed-code" spellcheck="false">days  = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+steps = [6200, 8100, 6400, 9100, 7300, 15630, 13200]
+
+for i in range(len(days)):
+    bar = "#" * (steps[i] // 1000)
+    print(days[i], bar, steps[i])</textarea>
+          <div class="ed-bar"><button class="btn ed-run" type="button">Run ▶</button><span class="ed-status"></span></div>
+          <pre class="ed-out"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- C18 — Insight -->
+    <section class="chunk" data-step="3">
+      <p class="eyebrow">Step 3 · Build with Data</p>
+      <h2 class="ch">5 · End with the insight</h2>
+      <p>"Your most active day was <strong>Saturday</strong>, and the weekend clearly beat the weekdays. What would you change next week?" That's the difference between <strong>running code</strong> and <strong>building with data</strong> — the numbers become a decision.</p>
+      <div class="callout bridge"><b>Make it yours.</b> Everything so far ran on a built-in list. Next, swap in real data from a file.</div>
+    </section>
+
+    <!-- Step 3 · real data + files -->
+    <section class="chunk" data-step="3">
+      <p class="eyebrow">Step 3 · Build with Data</p>
+      <h2 class="ch">6 · Now with real data</h2>
+      <p>Ready for the real thing? Download the sample files and run the same ideas on a full month — open in Trinket to code along, or in Colab for proper charts with matplotlib.</p>
       <div class="linkrow">
         <a href="data/step_data.csv" download>↓ step_data.csv</a>
         <a href="starter.py" download class="alt">↓ starter.py</a>
@@ -1358,31 +1508,7 @@ steps = 0              <span class="cmt"># the variable (a box)</span>
         <!-- Replace USERNAME with your GitHub username after deploying -->
         <a href="https://colab.research.google.com/github/USERNAME/python-ai-course/blob/main/step3_analysis.ipynb" target="_blank" rel="noopener" class="alt">Open in Colab ↗</a>
       </div>
-    </section>
-
-    <!-- C17 — Analyse -->
-    <section class="chunk" data-step="3">
-      <p class="eyebrow">Step 3 · Build with Data</p>
-      <h2 class="ch">2 · Analyse it</h2>
-      <p>Start with the data as a <strong>list</strong>, then squeeze out the big numbers:</p>
-      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code">days  = [<span class="fn">"Mon"</span>,<span class="fn">"Tue"</span>,<span class="fn">"Wed"</span>,<span class="fn">"Thu"</span>,<span class="fn">"Fri"</span>,<span class="fn">"Sat"</span>,<span class="fn">"Sun"</span>]
-steps = [6200, 8100, 6400, 13420, 7300, 12500, 11200]
-
-<span class="kw">print</span>(<span class="fn">"Total:"</span>, sum(steps))
-<span class="kw">print</span>(<span class="fn">"Average:"</span>, round(sum(steps)/len(steps)))
-<span class="kw">print</span>(<span class="fn">"Best day:"</span>, max(steps))</pre></div>
-      <p>Then a text bar chart with the <code>for</code> loop — no chart library needed:</p>
-      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="kw">for</span> i <span class="kw">in</span> range(len(days)):
-    bar = <span class="fn">"#"</span> * (steps[i] // 1000)
-    <span class="kw">print</span>(days[i], bar, steps[i])</pre></div>
-    </section>
-
-    <!-- C18 — Insight -->
-    <section class="chunk" data-step="3">
-      <p class="eyebrow">Step 3 · Build with Data</p>
-      <h2 class="ch">3 · End with the insight</h2>
-      <p>"Your most active day was Sunday; weekends beat weekdays. What would you change next week?" That's the difference between <strong>running code</strong> and <strong>building with data</strong> — the numbers become a decision.</p>
-      <div class="callout bridge"><b>Make it yours.</b> Swap in your own micro:bit data log, or your real Fitbit / Google Health export. The same code works on all of them.</div>
+      <div class="callout"><b>Your own numbers.</b> Swap in your micro:bit data log, or a real Fitbit / Google Health export — the same code works on all of them.</div>
     </section>
 
     <!-- C19 — Quiz 3 -->
@@ -1539,6 +1665,78 @@ steps = [6200, 8100, 6400, 13420, 7300, 12500, 11200]
     g.addEventListener('mouseenter',stop); g.addEventListener('mouseleave',start);
     render(); start();
   })();
+
+  /* line-by-line code execution walkthroughs */
+  var WALKS={
+    walkFor:[
+      {line:0,tok:'fr',tip:'range(3) lists the numbers 0, 1, 2 — so the loop runs three times.'},
+      {line:0,tok:'fi',tip:'Round 1: i takes the first value, 0.'},
+      {line:1,tok:'fi2',out:'0',tip:'print shows what i holds right now: 0.'},
+      {line:0,tok:'fi',tip:'Round 2: i becomes 1.'},
+      {line:1,tok:'fi2',out:'1',tip:'print shows 1.'},
+      {line:0,tok:'fi',tip:'Round 3: i becomes 2.'},
+      {line:1,tok:'fi2',out:'2',tip:'print shows 2.'},
+      {line:0,tip:'No values left in range — the loop ends here.'}
+    ],
+    walkWhile:[
+      {line:0,tok:'wn0',tip:'Make a box called n and put 1 inside.'},
+      {line:1,tok:'wc',tip:'Check the condition: is 1 <= 3? Yes — True — so we go inside the loop.'},
+      {line:2,out:'1',tip:'print(n) shows 1.'},
+      {line:3,tok:'wn3',tip:'n = n + 1 → n becomes 2.'},
+      {line:1,tok:'wc',tip:'Back to the top. Check again: 2 <= 3? True.'},
+      {line:2,out:'2',tip:'print shows 2.'},
+      {line:3,tok:'wn3',tip:'n becomes 3.'},
+      {line:1,tok:'wc',tip:'Check: 3 <= 3? Still True.'},
+      {line:2,out:'3',tip:'print shows 3.'},
+      {line:3,tok:'wn3',tip:'n becomes 4.'},
+      {line:1,tok:'wc',tip:'Check: 4 <= 3? False — so the loop stops here.'}
+    ],
+    walkFn:[
+      {line:0,tok:'fd',tip:'Define a machine called double that takes one input, n. It is built now — not run yet.'},
+      {line:3,tok:'fc',tip:'Now we call double(5) — send the value 5 into the machine.'},
+      {line:0,tok:'fn0',tip:'Inside the machine, n is 5.'},
+      {line:1,tok:'fr1',tip:'return n * 2 → 5 * 2 = 10. The machine hands 10 back.'},
+      {line:3,out:'10',tip:'print shows the result that came out: 10.'}
+    ]
+  };
+  document.querySelectorAll('.walk').forEach(function(w){
+    var steps=WALKS[w.id]; if(!steps)return;
+    var lines=w.querySelectorAll('.wl'), code=w.querySelector('.walk-code'),
+        pop=w.querySelector('.walk-pop'), out=w.querySelector('.walk-out'), prog=w.querySelector('.walk-prog'),
+        bStep=w.querySelector('.walk-step'), bPlay=w.querySelector('.walk-play'), bReset=w.querySelector('.walk-reset');
+    var i=-1, iv=null, playing=false, started=false;
+    function clearA(){var k;for(k=0;k<lines.length;k++)lines[k].classList.remove('active');var ts=w.querySelectorAll('.tok');for(k=0;k<ts.length;k++)ts[k].classList.remove('box');}
+    function reset(){i=-1;playing=false;started=false;if(iv){clearInterval(iv);iv=null;}clearA();pop.hidden=true;out.innerHTML='<span class="dim">output appears here…</span>';prog.textContent='Step 0 / '+steps.length;bStep.disabled=false;bPlay.disabled=false;}
+    function apply(s){
+      clearA();
+      var ln=lines[s.line];
+      if(ln)ln.classList.add('active');
+      var anchor=null;
+      if(s.tok){anchor=w.querySelector('.tok[data-tok="'+s.tok+'"]'); if(anchor)anchor.classList.add('box');}
+      pop.textContent=s.tip; pop.hidden=false;
+      if(ln){
+        pop.style.top=(ln.offsetTop+ln.offsetHeight+8)+'px';
+        var lft=anchor?anchor.offsetLeft:14, maxL=Math.max(8,code.clientWidth-270);
+        pop.style.left=Math.max(8,Math.min(lft,maxL))+'px';
+      }
+      if(s.out!==undefined){
+        if(!started){out.innerHTML='';started=true;}
+        var d=document.createElement('div');d.className='out';d.textContent=s.out;out.appendChild(d);
+        requestAnimationFrame(function(){d.classList.add('show');});
+      }
+      prog.textContent='Step '+(i+1)+' / '+steps.length;
+    }
+    function step(){ if(i>=steps.length-1)return false; i++; apply(steps[i]); if(i>=steps.length-1)bStep.disabled=true; return true; }
+    bStep.onclick=function(){ if(!playing)step(); };
+    bReset.onclick=reset;
+    bPlay.onclick=function(){
+      if(playing)return;
+      if(i>=steps.length-1)reset();
+      playing=true;bStep.disabled=true;bPlay.disabled=true;
+      iv=setInterval(function(){ if(!step()){clearInterval(iv);iv=null;playing=false;bPlay.disabled=false;} }, reduce?300:1500);
+    };
+    reset();
+  });
 
   /* info-icon tap toggle (touch screens) */
   document.querySelectorAll('.info').forEach(function(ic){
