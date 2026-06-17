@@ -88,8 +88,13 @@
   .callout.bridge{background:rgba(255,106,61,.08);border-color:rgba(255,106,61,.25);border-left-color:var(--coral)}
   .callout.bridge b{color:var(--coral)}
 
-  .codewrap{position:relative;margin:14px 0}
-  .codewrap .copy{position:absolute;top:8px;right:8px;font-family:var(--body);font-weight:600;font-size:.72rem;color:var(--code-fg);background:rgba(255,255,255,.12);border:none;border-radius:6px;padding:5px 9px;cursor:pointer}
+  .codewrap{position:relative;margin:14px 0;border:1px solid var(--line);border-radius:11px;overflow:hidden}
+  .codebar{display:flex;align-items:center;gap:8px;background:#10202F;padding:8px 10px}
+  .askbtn{font-family:var(--body);font-weight:700;font-size:.82rem;color:#fff;background:var(--coral);border:none;border-radius:8px;padding:8px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+  .askbtn:hover{filter:brightness(1.07);transform:translateY(-1px)}
+  .codebar .copy{margin-left:auto;position:static;font-family:var(--body);font-weight:600;font-size:.74rem;color:var(--code-fg);background:rgba(255,255,255,.12);border:none;border-radius:7px;padding:7px 11px;cursor:pointer}
+  .codebar .copy:hover{background:rgba(255,255,255,.22)}
+  .codebar + .code{border-radius:0}
   .codewrap .copy:hover{background:rgba(255,255,255,.22)}
   .code{font-family:var(--mono);font-size:.86rem;background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:16px 18px;overflow-x:auto;line-height:1.7;margin:0;white-space:pre}
   .code .ln{display:block;border-radius:5px;padding:0 6px;margin:0 -6px;transition:background .25s ease}
@@ -224,19 +229,21 @@
   @keyframes brF{0%,86%{border-color:var(--line);background:#fff}90%,97%{border-color:var(--coral);background:rgba(255,106,61,.14)}100%{border-color:var(--line);background:#fff}}
 
   /* loop — orbiting dot + pips lighting in sequence */
-  .dl{position:relative;width:118px;height:118px}
-  .dl .ring{position:absolute;inset:0;border:3px dashed var(--line);border-radius:50%}
-  .dl .ctr{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mono);font-size:1.3rem;color:var(--muted)}
-  .dl .orb{position:absolute;inset:0;animation:spin 3s linear infinite}
-  .dl .orb::before{content:"";position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:15px;height:15px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 4px rgba(255,106,61,.18)}
-  .dl .pip{position:absolute;top:50%;left:50%;width:9px;height:9px;margin:-4.5px;border-radius:50%;background:var(--line);animation:pip 3s linear infinite}
-  .dl .pip:nth-child(4){transform:rotate(0deg) translateY(-53px);animation-delay:0s}
-  .dl .pip:nth-child(5){transform:rotate(72deg) translateY(-53px);animation-delay:.6s}
-  .dl .pip:nth-child(6){transform:rotate(144deg) translateY(-53px);animation-delay:1.2s}
-  .dl .pip:nth-child(7){transform:rotate(216deg) translateY(-53px);animation-delay:1.8s}
-  .dl .pip:nth-child(8){transform:rotate(288deg) translateY(-53px);animation-delay:2.4s}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  @keyframes pip{0%,10%{background:var(--coral)}22%,100%{background:var(--line)}}
+  .dl{display:flex;flex-direction:column;align-items:center;gap:12px;font-family:var(--mono);font-size:.74rem;color:var(--ink-2)}
+  .dl .cells{display:flex;gap:7px}
+  .dl .fc{width:34px;height:46px;border-radius:6px;background:var(--line);color:transparent;display:grid;place-items:center;font-weight:700;font-size:1rem;animation-duration:4.5s;animation-iteration-count:infinite;animation-timing-function:ease}
+  .dl .fc:nth-child(1){animation-name:fc1}
+  .dl .fc:nth-child(2){animation-name:fc2}
+  .dl .fc:nth-child(3){animation-name:fc3}
+  .dl .fc:nth-child(4){animation-name:fc4}
+  .dl .fc:nth-child(5){animation-name:fc5}
+  .dl .fdone{font-weight:700;color:var(--green);opacity:0;animation:fdone 4.5s ease infinite}
+  @keyframes fc1{0%,6%{background:var(--line);color:transparent}11%,84%{background:var(--coral);color:#fff}90%,100%{background:var(--line);color:transparent}}
+  @keyframes fc2{0%,22%{background:var(--line);color:transparent}27%,84%{background:var(--coral);color:#fff}90%,100%{background:var(--line);color:transparent}}
+  @keyframes fc3{0%,38%{background:var(--line);color:transparent}43%,84%{background:var(--coral);color:#fff}90%,100%{background:var(--line);color:transparent}}
+  @keyframes fc4{0%,54%{background:var(--line);color:transparent}59%,84%{background:var(--coral);color:#fff}90%,100%{background:var(--line);color:transparent}}
+  @keyframes fc5{0%,68%{background:var(--line);color:transparent}73%,84%{background:var(--coral);color:#fff}90%,100%{background:var(--line);color:transparent}}
+  @keyframes fdone{0%,76%{opacity:0}82%,86%{opacity:1}90%,100%{opacity:0}}
 
   /* function — input slides into machine, output slides out */
   .df{position:relative;width:264px;height:64px;font-family:var(--mono);font-size:.72rem;font-weight:700}
@@ -251,13 +258,98 @@
   .dw{display:flex;flex-direction:column;align-items:center;gap:12px;font-family:var(--mono);font-size:.74rem;color:var(--ink-2)}
   .dw .cond{background:var(--ink);color:var(--paper);padding:4px 11px;border-radius:7px;font-weight:600}
   .dw .bars{display:flex;gap:7px}
-  .dw .seg{width:26px;height:46px;border-radius:6px;background:var(--line);animation:seg 4s ease-in-out infinite}
-  .dw .seg:nth-child(1){animation-delay:0s}
-  .dw .seg:nth-child(2){animation-delay:.55s}
-  .dw .seg:nth-child(3){animation-delay:1.1s}
-  .dw .seg:nth-child(4){animation-delay:1.65s}
-  .dw .seg:nth-child(5){animation-delay:2.2s}
-  @keyframes seg{0%,4%{background:var(--line)}10%,82%{background:var(--coral)}90%,100%{background:var(--line)}}
+  .dw .seg{width:26px;height:46px;border-radius:6px;background:var(--line);animation-duration:4.5s;animation-iteration-count:infinite;animation-timing-function:ease}
+  .dw .seg:nth-child(1){animation-name:ds1}
+  .dw .seg:nth-child(2){animation-name:ds2}
+  .dw .seg:nth-child(3){animation-name:ds3}
+  .dw .seg:nth-child(4){animation-name:ds4}
+  .dw .seg:nth-child(5){animation-name:ds5}
+  @keyframes ds1{0%,7%{background:var(--line)}13%,72%{background:var(--coral)}79%,100%{background:var(--line)}}
+  @keyframes ds2{0%,20%{background:var(--line)}26%,72%{background:var(--coral)}79%,100%{background:var(--line)}}
+  @keyframes ds3{0%,33%{background:var(--line)}39%,72%{background:var(--coral)}79%,100%{background:var(--line)}}
+  @keyframes ds4{0%,46%{background:var(--line)}52%,72%{background:var(--coral)}79%,100%{background:var(--line)}}
+  @keyframes ds5{0%,59%{background:var(--line)}65%,72%{background:var(--coral)}79%,100%{background:var(--line)}}
+
+  /* in-page python editor */
+  .editor{margin-top:12px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--code-bg)}
+  .editor .ed-code{width:100%;border:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--mono);font-size:.85rem;line-height:1.6;padding:14px 16px;resize:vertical;min-height:118px;outline:none;display:block}
+  .editor .ed-bar{display:flex;align-items:center;gap:12px;padding:8px 12px;background:#10202F;border-top:1px solid rgba(255,255,255,.08)}
+  .editor .ed-status{font-family:var(--mono);font-size:.74rem;color:#9FB0C2}
+  .editor .ed-out{margin:0;padding:12px 16px;font-family:var(--mono);font-size:.82rem;color:#CFE8D8;white-space:pre-wrap;border-top:1px solid rgba(255,255,255,.08);min-height:1.4em}
+  .ed-run{padding:7px 16px}
+
+  /* ask-AI button (sits next to Copy) */
+  /* (Ask AI button now lives in the code header bar — see .codebar / .askbtn) */
+
+  /* predict-the-output reveal */
+  .predict{background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:18px;margin-top:14px}
+  .predict .qline{font-weight:600;margin:12px 0 10px;color:var(--ink)}
+  .answer{display:none;margin-top:10px;border-left:4px solid var(--green);background:rgba(31,182,122,.08);border-radius:8px;padding:12px 14px;font-size:.95rem;color:var(--ink-2)}
+  .answer.show{display:block}
+  .answer .out{font-family:var(--mono);background:var(--code-bg);color:#CFE8D8;border-radius:6px;padding:4px 9px;display:inline-block;margin:2px 0}
+
+  /* relational-operator animation */
+  .dr{position:relative;width:250px;height:80px}
+  .dr .ex{position:absolute;inset:0;display:grid;place-items:center;border-radius:12px;font-family:var(--mono);font-weight:700;font-size:1.25rem}
+  .dr .ex.t{background:rgba(31,182,122,.12);border:2px solid var(--green);color:var(--ink);animation:drT 5s ease infinite}
+  .dr .ex.f{background:rgba(255,106,61,.12);border:2px solid var(--coral);color:var(--ink);animation:drF 5s ease infinite}
+  @keyframes drT{0%,6%{opacity:0}12%,44%{opacity:1}50%,100%{opacity:0}}
+  @keyframes drF{0%,50%{opacity:0}56%,92%{opacity:1}98%,100%{opacity:0}}
+
+  /* accelerometer axis animation */
+  .dax{display:flex;align-items:flex-end;gap:20px;height:120px}
+  .dax .axis{display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--mono);font-size:.72rem;color:var(--ink-2);font-weight:600}
+  .dax .bar{width:30px;height:84px;background:var(--line);border-radius:6px;display:flex;align-items:flex-end;overflow:hidden}
+  .dax .fill{width:100%;background:var(--coral);border-radius:6px;height:40%}
+  .dax .axis.x .fill{animation:axx 1.6s ease-in-out infinite}
+  .dax .axis.y .fill{animation:axy 2.1s ease-in-out infinite}
+  .dax .axis.z .fill{animation:axz 1.3s ease-in-out infinite}
+  @keyframes axx{0%,100%{height:30%}50%{height:88%}}
+  @keyframes axy{0%,100%{height:60%}40%{height:20%}70%{height:92%}}
+  @keyframes axz{0%,100%{height:45%}30%{height:78%}60%{height:25%}}
+
+  /* micro:bit illustration + photos */
+  .mbfig{display:flex;flex-direction:column;align-items:center;gap:8px;margin:14px 0}
+  .mbfig svg{width:200px;height:auto}
+  .mbfig .cap{font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+  .userimg{width:100%;border:1px solid var(--line);border-radius:12px;margin:14px 0;display:block}
+  .imgnote{font-size:.86rem;color:var(--muted);background:rgba(62,111,168,.07);border:1px dashed var(--blue);border-radius:10px;padding:12px 14px;margin:12px 0}
+  .imgnote code{color:var(--blue)}
+
+  /* hero walking person + live step counter */
+  .walkscene{position:relative;background:linear-gradient(180deg,#fff,#FBF9F3);border:1px solid var(--line);border-radius:var(--radius);height:172px;margin:16px 0;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:34px}
+  .walkscene .ground{position:absolute;left:0;right:0;bottom:30px;height:2px;background:var(--line)}
+  .walker{position:relative;width:80px;height:104px;margin-bottom:6px;animation:bob .45s ease-in-out infinite}
+  .walker .seg{position:absolute;background:var(--ink);border-radius:3px}
+  .walker .head{top:0;left:30px;width:20px;height:20px;border-radius:50%}
+  .walker .body{top:20px;left:36px;width:5px;height:44px}
+  .walker .leg{top:62px;left:36px;width:5px;height:38px;transform-origin:top center}
+  .walker .arm{top:26px;left:36px;width:5px;height:30px;background:var(--coral);transform-origin:top center}
+  .walker .leg.a{animation:legA .9s ease-in-out infinite}
+  .walker .leg.b{animation:legB .9s ease-in-out infinite}
+  .walker .arm.a{animation:armA .9s ease-in-out infinite}
+  .walker .arm.b{animation:armB .9s ease-in-out infinite}
+  @keyframes legA{0%,100%{transform:rotate(24deg)}50%{transform:rotate(-24deg)}}
+  @keyframes legB{0%,100%{transform:rotate(-24deg)}50%{transform:rotate(24deg)}}
+  @keyframes armA{0%,100%{transform:rotate(-20deg)}50%{transform:rotate(20deg)}}
+  @keyframes armB{0%,100%{transform:rotate(20deg)}50%{transform:rotate(-20deg)}}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  .pedo2{font-family:var(--mono);text-align:center}
+  .pedo2 .big{font-size:2.1rem;font-weight:700;color:var(--coral);line-height:1}
+  .pedo2 .lab{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+  /* true/false question */
+  .tf{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:26px 24px;text-align:center;margin-top:16px}
+  .tf-q{font-family:var(--mono);font-weight:700;font-size:2.6rem;color:var(--ink);margin-bottom:20px}
+  .tf-btns{display:flex;gap:12px;justify-content:center}
+  .tfbtn{font-family:var(--body);font-weight:700;font-size:1rem;border:2px solid var(--ink);background:#fff;color:var(--ink);padding:12px 32px;border-radius:10px;cursor:pointer;transition:transform .1s ease,background .15s ease}
+  .tfbtn:hover{transform:translateY(-1px)}
+  .tfbtn.tf-correct{background:rgba(31,182,122,.16);border-color:var(--green)}
+  .tfbtn.tf-wrong{background:rgba(255,106,61,.16);border-color:var(--coral)}
+  .tfbtn:disabled{cursor:default}
+  .tf-fb{display:none;margin-top:18px;font-size:1rem;color:var(--ink-2)}
+  .tf-fb.show{display:block}
+  .tf-fb b.t{color:var(--green)} .tf-fb b.f{color:var(--coral)}
 
   /* quiz */
   .quiz{background:var(--ink);border-radius:var(--radius);padding:24px;margin-top:14px;color:var(--paper)}
@@ -319,6 +411,19 @@
       <p class="eyebrow">From Zero to Python with AI</p>
       <h1 class="title"><span class="a">Learn smart.</span><br><span class="b">Code fast.</span><br><span class="c">Build with real devices.</span></h1>
       <p class="lead">Three steps, one idea running through all of them — <strong>steps</strong>. You'll write Python with an AI helper, build a step counter on a real micro:bit, then turn step data into insights. Use the arrows (or ← → keys) to move through.</p>
+      <div class="walkscene">
+        <div class="ground"></div>
+        <div class="walker">
+          <span class="seg arm b"></span>
+          <span class="seg leg b"></span>
+          <span class="seg head"></span>
+          <span class="seg body"></span>
+          <span class="seg arm a"></span>
+          <span class="seg leg a"></span>
+        </div>
+        <div class="pedo2"><div class="big" id="walkCount">0</div><div class="lab">steps counted</div></div>
+      </div>
+      <div class="callout"><b>✨ Two buttons to know.</b> Every code block in this course has an <b>Ask AI to explain this code</b> button — tap it any time you're unsure and it opens a plain-English explanation. Most also have <b>▶ Open Python editor</b>, which runs the code right here on the page. Use them whenever you're stuck — that's the whole point.</div>
     </section>
 
     <!-- C1 — What is AI -->
@@ -423,6 +528,77 @@
         <div class="console" id="varOut" style="max-height:140px;overflow-y:auto"><span class="dim">press a button — the code and the result show here…</span></div>
         <p class="tag"><b>Returns in:</b> <code>steps = 0</code> — your micro:bit counter (Step 2) and your data total (Step 3).</p>
       </div>
+      <div class="edrow">
+        <div class="controls"><button class="btn ghost edopen" type="button">▶ Open Python editor</button></div>
+        <div class="editor" hidden>
+          <textarea class="ed-code" spellcheck="false">steps = 0
+steps = steps + 1
+print(steps)</textarea>
+          <div class="ed-bar"><button class="btn ed-run" type="button">Run ▶</button><span class="ed-status"></span></div>
+          <pre class="ed-out"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Relational operators — animation -->
+    <section class="chunk" data-step="1">
+      <p class="eyebrow">Before we branch · Comparing numbers</p>
+      <h2 class="ch">True or false?</h2>
+      <p>Before an <code>if</code> can choose a path, it needs a yes/no question. In Python you ask one by <strong>comparing</strong> two numbers with <code>&gt;</code> (greater than) or <code>&lt;</code> (less than). The answer is always <strong>True</strong> or <strong>False</strong>.</p>
+      <div class="demo"><span class="watch">watch · same numbers, two questions</span>
+        <div class="dr"><div class="ex t">8 &gt; 5  →  True</div><div class="ex f">8 &lt; 5  →  False</div></div>
+      </div>
+      <p>8 really is greater than 5, so <code>8 &gt; 5</code> is True. 8 is not less than 5, so <code>8 &lt; 5</code> is False.</p>
+    </section>
+
+    <!-- Relational T/F 1 -->
+    <section class="chunk" data-step="1">
+      <p class="eyebrow">Before we branch · True or false?</p>
+      <h2 class="ch">Is this true?</h2>
+      <p>Read it as a question, decide, then tap your answer.</p>
+      <div class="tf" data-ans="1" data-why="10 really is greater than 3.">
+        <div class="tf-q">10 &gt; 3</div>
+        <div class="tf-btns"><button class="tfbtn" type="button" data-v="1">True</button><button class="tfbtn" type="button" data-v="0">False</button></div>
+        <div class="tf-fb"></div>
+      </div>
+    </section>
+
+    <!-- Relational T/F 2 -->
+    <section class="chunk" data-step="1">
+      <p class="eyebrow">Before we branch · True or false?</p>
+      <h2 class="ch">Is this true?</h2>
+      <p>Watch out — the bigger number is on the right this time.</p>
+      <div class="tf" data-ans="0" data-why="2 is not greater than 9, so this is False.">
+        <div class="tf-q">2 &gt; 9</div>
+        <div class="tf-btns"><button class="tfbtn" type="button" data-v="1">True</button><button class="tfbtn" type="button" data-v="0">False</button></div>
+        <div class="tf-fb"></div>
+      </div>
+    </section>
+
+    <!-- Relational T/F 3 -->
+    <section class="chunk" data-step="1">
+      <p class="eyebrow">Before we branch · True or false?</p>
+      <h2 class="ch">Is this true?</h2>
+      <p>Now a <em>less than</em> question.</p>
+      <div class="tf" data-ans="1" data-why="4 is less than 8, so this is True.">
+        <div class="tf-q">4 &lt; 8</div>
+        <div class="tf-btns"><button class="tfbtn" type="button" data-v="1">True</button><button class="tfbtn" type="button" data-v="0">False</button></div>
+        <div class="tf-fb"></div>
+      </div>
+    </section>
+
+    <!-- Relational T/F 4 -->
+    <section class="chunk" data-step="1">
+      <p class="eyebrow">Before we branch · True or false?</p>
+      <h2 class="ch">The tricky one</h2>
+      <p>Equal numbers — is one <em>less than</em> the other?</p>
+      <div class="tf" data-ans="0" data-why="7 equals 7, so 7 is not less than 7 — that's False. (You'd need &lt;= for 'less than or equal'.)">
+        <div class="tf-q">7 &lt; 7</div>
+        <div class="tf-btns"><button class="tfbtn" type="button" data-v="1">True</button><button class="tfbtn" type="button" data-v="0">False</button></div>
+        <div class="tf-fb"></div>
+      </div>
+      <p>These True/False answers are exactly what <strong>if</strong>, <strong>for</strong> and <strong>while</strong> use to decide what to do next.</p>
+      <div class="linkrow"><a href="https://docs.python.org/3/library/stdtypes.html#comparisons" target="_blank" rel="noopener" class="alt">Learn more: Python comparisons ↗</a></div>
     </section>
 
     <!-- Conditional — animation -->
@@ -431,7 +607,7 @@
       <h2 class="ch">A fork in the road</h2>
       <p>An <strong>if</strong> is like a checkpoint on a path: it asks a yes/no question, and only the matching road opens.</p>
       <div class="demo"><span class="watch">watch · the gate decides</span>
-        <div class="dc"><div class="diamond"></div><div class="dlbl">≥10?</div><div class="tok a"></div><div class="tok b"></div><div class="br t">active!</div><div class="br f">keep going</div></div>
+        <div class="dc"><div class="diamond"></div><div class="dlbl">&gt;=10?</div><div class="tok a"></div><div class="tok b"></div><div class="br t">active!</div><div class="br f">keep going</div></div>
       </div>
       <p>The question here: have you taken at least 10 steps? Next: try different values.</p>
     </section>
@@ -450,6 +626,18 @@
         <div class="console" id="condOut" style="max-height:120px;overflow-y:auto"><span class="dim">drag the slider — the check and its result show here…</span></div>
         <p class="tag"><b>Returns in:</b> <code>if shake: steps += 1</code> (Step 2); <code>if steps &gt;= 10000:</code> (Step 3).</p>
       </div>
+      <div class="edrow">
+        <div class="controls"><button class="btn ghost edopen" type="button">▶ Open Python editor</button></div>
+        <div class="editor" hidden>
+          <textarea class="ed-code" spellcheck="false">steps = 12
+if steps &gt;= 10:
+    print("Great, you're active!")
+else:
+    print("Keep going!")</textarea>
+          <div class="ed-bar"><button class="btn ed-run" type="button">Run ▶</button><span class="ed-status"></span></div>
+          <pre class="ed-out"></pre>
+        </div>
+      </div>
     </section>
 
     <!-- For loop — animation -->
@@ -458,7 +646,7 @@
       <h2 class="ch">The <code>for</code> loop</h2>
       <p>A <strong>for</strong> loop repeats a <strong>set number of times</strong> — like doing exactly five push-ups. <code>range(5)</code> gives 0, 1, 2, 3, 4, so the body runs five times.</p>
       <div class="demo"><span class="watch">watch · a fixed number of laps</span>
-        <div class="dl"><span class="ring"></span><span class="ctr">5×</span><span class="orb"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+        <div class="dl"><div class="cells"><span class="fc">0</span><span class="fc">1</span><span class="fc">2</span><span class="fc">3</span><span class="fc">4</span></div><div class="fdone">done ✓ — ran 5 times, then stops</div></div>
       </div>
     </section>
 
@@ -478,6 +666,15 @@
           <button class="btn ghost" id="forReset">Reset</button>
         </div>
         <p class="tag"><b>Returns in:</b> <code>for day in week:</code> walks your step data (Step 3).</p>
+      </div>
+      <div class="edrow">
+        <div class="controls"><button class="btn ghost edopen" type="button">▶ Open Python editor</button></div>
+        <div class="editor" hidden>
+          <textarea class="ed-code" spellcheck="false">for step in range(5):
+    print(step)</textarea>
+          <div class="ed-bar"><button class="btn ed-run" type="button">Run ▶</button><span class="ed-status"></span></div>
+          <pre class="ed-out"></pre>
+        </div>
       </div>
     </section>
 
@@ -507,6 +704,17 @@
           <button class="btn ghost" id="whileReset">Reset</button>
         </div>
         <p class="tag"><b>Returns in:</b> <code>while True:</code> is the micro:bit's forever-loop (Step 2).</p>
+      </div>
+      <div class="edrow">
+        <div class="controls"><button class="btn ghost edopen" type="button">▶ Open Python editor</button></div>
+        <div class="editor" hidden>
+          <textarea class="ed-code" spellcheck="false">steps = 0
+while steps &lt; 5:
+    steps += 1
+    print(steps)</textarea>
+          <div class="ed-bar"><button class="btn ed-run" type="button">Run ▶</button><span class="ed-status"></span></div>
+          <pre class="ed-out"></pre>
+        </div>
       </div>
       <div class="callout bridge"><b>The micro:bit loop.</b> Your step counter uses <code>while True:</code> — the condition is always true, so it never stops watching for shakes.</div>
     </section>
@@ -538,14 +746,123 @@
         <div class="console" id="fnConsole" style="max-height:120px;overflow-y:auto"><span class="dim">run the machine — each call shows here…</span></div>
         <p class="tag"><b>Returns in:</b> a reusable <code>summarise()</code> machine in Step 3.</p>
       </div>
+      <div class="edrow">
+        <div class="controls"><button class="btn ghost edopen" type="button">▶ Open Python editor</button></div>
+        <div class="editor" hidden>
+          <textarea class="ed-code" spellcheck="false">def steps_to_distance(steps):
+    return steps * 0.75
+
+print(steps_to_distance(2000))</textarea>
+          <div class="ed-bar"><button class="btn ed-run" type="button">Run ▶</button><span class="ed-status"></span></div>
+          <pre class="ed-out"></pre>
+        </div>
+      </div>
     </section>
 
-    <!-- C8 — Try it -->
+    <!-- Recap intro -->
     <section class="chunk" data-step="1">
-      <p class="eyebrow">Step 1 · Learn Smart</p>
-      <h2 class="ch">Try it yourself</h2>
-      <p>Open a free Python editor, type the snippets, and ask your AI helper to explain anything fuzzy.</p>
-      <div class="linkrow"><a href="https://trinket.io/python" target="_blank" rel="noopener">Open Trinket editor ↗</a><a href="https://pythontutor.com/visualize.html" target="_blank" rel="noopener" class="alt">Visualise code step-by-step ↗</a></div>
+      <p class="eyebrow">Step 1 · Recap</p>
+      <h2 class="ch">Predict the output</h2>
+      <p>Before the checkpoint, let's recap. On each of the next few screens, read the code and decide <strong>what it prints</strong> — then reveal the answer, or run it to check. No pressure; this is how you learn to read code.</p>
+      <div class="linkrow"><a href="https://trinket.io/python" target="_blank" rel="noopener">Open Trinket editor ↗</a><a href="https://pythontutor.com/visualize.html" target="_blank" rel="noopener" class="alt">Visualise step-by-step ↗</a></div>
+    </section>
+
+    <!-- Recap 1: variable -->
+    <section class="chunk" data-step="1">
+      <p class="eyebrow">Step 1 · Recap · Variable</p>
+      <h2 class="ch">What will this print?</h2>
+      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code">steps = 0
+steps = steps + 2
+steps = steps + 2
+print(steps)</pre></div>
+      <div class="predict">
+        <button class="btn reveal-btn" type="button">Show answer</button>
+        <div class="answer">It prints <span class="out">4</span>. The box starts at 0, then 2 is added twice — the value inside is replaced each time.</div>
+      </div>
+      <div class="edrow">
+        <div class="controls"><button class="btn ghost edopen" type="button">▶ Open Python editor</button></div>
+        <div class="editor" hidden>
+          <textarea class="ed-code" spellcheck="false">steps = 0
+steps = steps + 2
+steps = steps + 2
+print(steps)</textarea>
+          <div class="ed-bar"><button class="btn ed-run" type="button">Run ▶</button><span class="ed-status"></span></div>
+          <pre class="ed-out"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recap 2: for loop -->
+    <section class="chunk" data-step="1">
+      <p class="eyebrow">Step 1 · Recap · For loop</p>
+      <h2 class="ch">What will this print?</h2>
+      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="kw">for</span> i <span class="kw">in</span> range(3):
+    print(i * 2)</pre></div>
+      <div class="predict">
+        <button class="btn reveal-btn" type="button">Show answer</button>
+        <div class="answer">It prints <span class="out">0</span> <span class="out">2</span> <span class="out">4</span> (on separate lines). <code>range(3)</code> gives 0, 1, 2, and each is doubled.</div>
+      </div>
+      <div class="edrow">
+        <div class="controls"><button class="btn ghost edopen" type="button">▶ Open Python editor</button></div>
+        <div class="editor" hidden>
+          <textarea class="ed-code" spellcheck="false">for i in range(3):
+    print(i * 2)</textarea>
+          <div class="ed-bar"><button class="btn ed-run" type="button">Run ▶</button><span class="ed-status"></span></div>
+          <pre class="ed-out"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recap 3: conditional -->
+    <section class="chunk" data-step="1">
+      <p class="eyebrow">Step 1 · Recap · Conditional</p>
+      <h2 class="ch">What will this print?</h2>
+      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code">steps = 8
+<span class="kw">if</span> steps &gt; 10:
+    print(<span class="fn">"active"</span>)
+<span class="kw">else</span>:
+    print(<span class="fn">"keep going"</span>)</pre></div>
+      <div class="predict">
+        <button class="btn reveal-btn" type="button">Show answer</button>
+        <div class="answer">It prints <span class="out">keep going</span>. Is 8 &gt; 10? No — that's False, so the <code>else</code> path runs.</div>
+      </div>
+      <div class="edrow">
+        <div class="controls"><button class="btn ghost edopen" type="button">▶ Open Python editor</button></div>
+        <div class="editor" hidden>
+          <textarea class="ed-code" spellcheck="false">steps = 8
+if steps &gt; 10:
+    print("active")
+else:
+    print("keep going")</textarea>
+          <div class="ed-bar"><button class="btn ed-run" type="button">Run ▶</button><span class="ed-status"></span></div>
+          <pre class="ed-out"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recap 4: while loop -->
+    <section class="chunk" data-step="1">
+      <p class="eyebrow">Step 1 · Recap · While loop</p>
+      <h2 class="ch">What will this print?</h2>
+      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code">n = 1
+<span class="kw">while</span> n &lt; 4:
+    print(n)
+    n = n + 1</pre></div>
+      <div class="predict">
+        <button class="btn reveal-btn" type="button">Show answer</button>
+        <div class="answer">It prints <span class="out">1</span> <span class="out">2</span> <span class="out">3</span> (on separate lines). It keeps going while <code>n &lt; 4</code> is True, stopping once n reaches 4.</div>
+      </div>
+      <div class="edrow">
+        <div class="controls"><button class="btn ghost edopen" type="button">▶ Open Python editor</button></div>
+        <div class="editor" hidden>
+          <textarea class="ed-code" spellcheck="false">n = 1
+while n &lt; 4:
+    print(n)
+    n = n + 1</textarea>
+          <div class="ed-bar"><button class="btn ed-run" type="button">Run ▶</button><span class="ed-status"></span></div>
+          <pre class="ed-out"></pre>
+        </div>
+      </div>
     </section>
 
     <!-- C9 — Quiz 1 -->
@@ -555,27 +872,73 @@
       <div class="quiz" data-quiz="1"></div>
     </section>
 
-    <!-- C10 — Step 2 intro -->
+    <!-- Step 2 intro -->
     <section class="chunk" data-step="2">
       <p class="eyebrow">Step 2 · Code Fast</p>
       <h2 class="ch">Put your code on a real device</h2>
-      <p>The micro:bit is a tiny computer with a built-in <strong>accelerometer</strong> — a motion sensor, like in your phone. We'll use it to count steps. Same Python ideas from Step 1, now running in your hand.</p>
+      <p>The micro:bit is a tiny pocket-sized computer with lights, buttons and sensors built in. We'll write Python that runs on it — the same ideas from Step 1, now in your hand — and turn it into a step counter.</p>
+      <div class="mbfig">
+        <svg viewBox="0 0 220 178" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="6" width="204" height="150" rx="16" fill="#16263A"/>
+          <circle cx="34" cy="82" r="13" fill="#fff"/><text x="34" y="87" text-anchor="middle" font-size="13" font-weight="700" fill="#16263A" font-family="monospace">A</text>
+          <circle cx="186" cy="82" r="13" fill="#fff"/><text x="186" y="87" text-anchor="middle" font-size="13" font-weight="700" fill="#16263A" font-family="monospace">B</text>
+          <g fill="#FF6A3D">
+            <rect x="78" y="36" width="7" height="10" rx="2"/><rect x="94" y="36" width="7" height="10" rx="2"/><rect x="110" y="36" width="7" height="10" rx="2"/><rect x="126" y="36" width="7" height="10" rx="2"/><rect x="142" y="36" width="7" height="10" rx="2"/>
+            <rect x="78" y="52" width="7" height="10" rx="2"/><rect x="94" y="52" width="7" height="10" rx="2"/><rect x="110" y="52" width="7" height="10" rx="2"/><rect x="126" y="52" width="7" height="10" rx="2"/><rect x="142" y="52" width="7" height="10" rx="2"/>
+            <rect x="78" y="68" width="7" height="10" rx="2"/><rect x="94" y="68" width="7" height="10" rx="2"/><rect x="110" y="68" width="7" height="10" rx="2"/><rect x="126" y="68" width="7" height="10" rx="2"/><rect x="142" y="68" width="7" height="10" rx="2"/>
+            <rect x="78" y="84" width="7" height="10" rx="2"/><rect x="94" y="84" width="7" height="10" rx="2"/><rect x="110" y="84" width="7" height="10" rx="2"/><rect x="126" y="84" width="7" height="10" rx="2"/><rect x="142" y="84" width="7" height="10" rx="2"/>
+            <rect x="78" y="100" width="7" height="10" rx="2"/><rect x="94" y="100" width="7" height="10" rx="2"/><rect x="110" y="100" width="7" height="10" rx="2"/><rect x="126" y="100" width="7" height="10" rx="2"/><rect x="142" y="100" width="7" height="10" rx="2"/>
+          </g>
+          <text x="110" y="138" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="monospace">micro:bit</text>
+          <g fill="#E3C04A"><rect x="30" y="156" width="26" height="20" rx="2"/><rect x="68" y="156" width="26" height="20" rx="2"/><rect x="126" y="156" width="26" height="20" rx="2"/><rect x="164" y="156" width="26" height="20" rx="2"/></g>
+        </svg>
+        <span class="cap">the BBC micro:bit — 25 LEDs, buttons A/B, motion sensor</span>
+      </div>
+      <div class="linkrow"><a href="https://microbit.org" target="_blank" rel="noopener">microbit.org ↗</a><a href="https://python.microbit.org" target="_blank" rel="noopener" class="alt">Python editor ↗</a></div>
     </section>
 
-    <!-- C11 — Connect -->
+    <!-- Connect it -->
     <section class="chunk" data-step="2">
       <p class="eyebrow">Step 2 · Code Fast</p>
       <h2 class="ch">1 · Connect it</h2>
-      <p>Plug the micro:bit into your laptop with USB. Open MakeCode, click <em>Connect</em>, follow the pairing prompt, and flash the flashing-heart example first — once it shows on the LEDs, everything works.</p>
-      <div class="linkrow"><a href="https://makecode.microbit.org" target="_blank" rel="noopener">Open MakeCode ↗</a><a href="https://python.microbit.org" target="_blank" rel="noopener" class="alt">Python editor ↗</a></div>
-      <div class="callout"><b>Beginner tip.</b> Build in MakeCode <em>blocks</em> first, then switch to the <em>Python</em> view. Seeing the same program both ways is the moment it clicks: blocks <em>are</em> Python.</div>
+      <p>Plug the micro:bit into your laptop with the USB cable. It appears like a little USB drive — that's how your code gets onto it.</p>
+      <img class="userimg" src="images/connect-microbit.jpg" alt="How to connect the micro:bit to a laptop" onerror="this.style.display='none';var n=this.nextElementSibling;if(n)n.style.display='block';">
+      <div class="imgnote" style="display:none">Add your own connection photo: drop the file into an <code>images/</code> folder in your repo named <code>connect-microbit.jpg</code> and commit — it will appear here automatically.</div>
+      <div class="callout"><b>Beginner tip.</b> In the Python editor, click <em>Connect</em> and pick your micro:bit once; after that, sending code is a single click.</div>
     </section>
 
-    <!-- C12 — Build counter -->
+    <!-- How accelerometer works -->
+    <section class="chunk" data-step="2">
+      <p class="eyebrow">Step 2 · How it senses</p>
+      <h2 class="ch">How an accelerometer works</h2>
+      <p>Inside the micro:bit is an <strong>accelerometer</strong> — the same motion sensor that lets your phone know when you tilt it. It measures movement along three directions:</p>
+      <ul>
+        <li><strong>X</strong> — tilting left and right</li>
+        <li><strong>Y</strong> — tilting forward and back</li>
+        <li><strong>Z</strong> — moving up and down</li>
+      </ul>
+      <p>The micro:bit reads these values many times a second. When you take a step, your body bounces slightly — and that bounce shows up as a little spike in the readings. Count the spikes, and you've counted steps.</p>
+    </section>
+
+    <!-- Axis animation -->
+    <section class="chunk" data-step="2">
+      <p class="eyebrow">Step 2 · How it senses</p>
+      <h2 class="ch">Sensing each axis</h2>
+      <p>As the micro:bit moves, the X, Y and Z readings rise and fall. Watch them wobble — a step is one of those bounces.</p>
+      <div class="demo"><span class="watch">watch · live motion readings</span>
+        <div class="dax">
+          <div class="axis x"><div class="bar"><div class="fill"></div></div>X</div>
+          <div class="axis y"><div class="bar"><div class="fill"></div></div>Y</div>
+          <div class="axis z"><div class="bar"><div class="fill"></div></div>Z</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Build counter -->
     <section class="chunk" data-step="2">
       <p class="eyebrow">Step 2 · Code Fast</p>
       <h2 class="ch">2 · Build the step counter</h2>
-      <p>Every line is a Step 1 idea in the wild. Flash it, strap the micro:bit to your ankle, and walk around.</p>
+      <p>Every line is a Step 1 idea in the wild — a variable, a forever <code>while</code> loop, and an <code>if</code>.</p>
       <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="kw">from</span> microbit <span class="kw">import</span> *
 
 steps = 0              <span class="cmt"># the variable (a box)</span>
@@ -583,13 +946,53 @@ steps = 0              <span class="cmt"># the variable (a box)</span>
     <span class="kw">if</span> accelerometer.was_gesture(<span class="fn">'shake'</span>):  <span class="cmt"># the if (a step!)</span>
         steps += 1     <span class="cmt"># add one</span>
         display.show(steps)</pre></div>
-      <p>Does the count match your real steps? Almost never exactly — and that's what the next part fixes.</p>
+      <div class="callout"><b>How <code>shake</code> works.</b> <code>accelerometer.was_gesture('shake')</code> watches those X/Y/Z readings and returns <em>True</em> when it sees a sharp bounce. Each detected shake counts as roughly one step — simple, and close enough to start.</div>
+      <div class="linkrow"><a href="https://python.microbit.org" target="_blank" rel="noopener">Open the Python editor ↗</a></div>
     </section>
 
-    <!-- C13 — Make it better -->
+    <!-- Simulator -->
     <section class="chunk" data-step="2">
       <p class="eyebrow">Step 2 · Code Fast</p>
-      <h2 class="ch">3 · Make it better</h2>
+      <h2 class="ch">3 · Test it in the simulator</h2>
+      <p>You don't even need the device yet. The Python editor has a <strong>simulator</strong> — a micro:bit on screen — so you can check your code before flashing it.</p>
+      <ul>
+        <li>Paste the code into <a href="https://python.microbit.org" target="_blank" rel="noopener">python.microbit.org</a>.</li>
+        <li>On the simulated micro:bit, press the <strong>shake</strong> button (or drag it) to fake a step.</li>
+        <li>Watch the number on the LED display go up. If it does, your logic works.</li>
+      </ul>
+      <div class="callout"><b>Why simulate first?</b> You catch mistakes instantly, without unplugging and re-flashing each time — much faster to learn.</div>
+    </section>
+
+    <!-- Download to device -->
+    <section class="chunk" data-step="2">
+      <p class="eyebrow">Step 2 · Code Fast</p>
+      <h2 class="ch">4 · Download to your micro:bit</h2>
+      <p>Happy with the simulator? Now put it on the real thing:</p>
+      <ul>
+        <li>With the micro:bit plugged in, click <strong>Send to micro:bit</strong> (or <strong>Download</strong>) in the editor.</li>
+        <li>The first time, choose your micro:bit from the pop-up to pair it.</li>
+        <li>A light on the back flickers as the code copies over. When it stops, your program is running.</li>
+      </ul>
+      <div class="callout"><b>No pairing pop-up?</b> Click <em>Download</em> to save the <code>.hex</code> file, then drag it onto the <code>MICROBIT</code> drive that appears on your computer — same result.</div>
+    </section>
+
+    <!-- Battery + wear -->
+    <section class="chunk" data-step="2">
+      <p class="eyebrow">Step 2 · Code Fast</p>
+      <h2 class="ch">5 · Power it and wear it</h2>
+      <p>To walk around without the USB cable, use the battery pack:</p>
+      <ul>
+        <li>Put the batteries in the battery box (mind the + and − markings).</li>
+        <li>Plug its little white connector into the <strong>JST socket</strong> on the micro:bit — it only fits one way.</li>
+        <li>Strap the micro:bit and battery box to your <strong>ankle</strong> with a band, so each stride gives a clear bounce.</li>
+      </ul>
+      <p>Now walk a known number of steps and compare. Does the count match? Almost never exactly — which is the perfect thing to improve next.</p>
+    </section>
+
+    <!-- Make it better -->
+    <section class="chunk" data-step="2">
+      <p class="eyebrow">Step 2 · Code Fast</p>
+      <h2 class="ch">6 · Make it better</h2>
       <p>Pick one. Ask your AI helper to write it, then read its explanation:</p>
       <ul>
         <li><strong>Reset button:</strong> <code>if button_b.is_pressed(): steps = 0</code></li>
@@ -696,12 +1099,93 @@ steps = [6200, 8100, 6400, 13420, 7300, 12500, 11200]
   /* ===== animations & quizzes (run once; elements exist even while hidden) ===== */
   document.querySelectorAll('[data-copy]').forEach(function(btn){
     btn.addEventListener('click',function(){
-      var pre=btn.parentElement.querySelector('.code');
+      var wrap=btn.closest('.codewrap'); var pre=wrap&&wrap.querySelector('.code'); if(!pre) return;
       if(navigator.clipboard){navigator.clipboard.writeText(pre.innerText).then(function(){
         var old=btn.textContent;btn.textContent='Copied!';setTimeout(function(){btn.textContent=old;},1200);
       });}
     });
   });
+
+  /* Code header bar: prominent Ask AI (opens ChatGPT prefilled) + Copy */
+  document.querySelectorAll('.codewrap').forEach(function(cw){
+    var pre=cw.querySelector('.code'); if(!pre) return;
+    var bar=document.createElement('div'); bar.className='codebar';
+    var ask=document.createElement('button'); ask.className='askbtn'; ask.type='button';
+    ask.innerHTML='✨ Ask AI to explain this code';
+    ask.addEventListener('click',function(){
+      var prompt="Explain this Python code line by line, simply, for a complete beginner:\n\n"+pre.innerText;
+      window.open('https://chatgpt.com/?q='+encodeURIComponent(prompt),'_blank','noopener');
+    });
+    bar.appendChild(ask);
+    var copy=cw.querySelector('.copy'); if(copy) bar.appendChild(copy);
+    cw.insertBefore(bar, cw.firstChild);
+  });
+
+  /* reveal "show answer" toggles */
+  document.querySelectorAll('.reveal-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var ans=btn.parentElement.querySelector('.answer');
+      if(ans){var open=ans.classList.toggle('show');btn.textContent=open?'Hide answer':'Show answer';}
+    });
+  });
+
+  /* true/false questions */
+  document.querySelectorAll('.tf').forEach(function(tf){
+    var ans=tf.getAttribute('data-ans'), why=tf.getAttribute('data-why'),
+        fb=tf.querySelector('.tf-fb'), done=false;
+    tf.querySelectorAll('.tfbtn').forEach(function(b){
+      b.addEventListener('click',function(){
+        if(done)return; done=true;
+        var chosen=b.getAttribute('data-v');
+        tf.querySelectorAll('.tfbtn').forEach(function(x){x.disabled=true;});
+        tf.querySelector('.tfbtn[data-v="'+ans+'"]').classList.add('tf-correct');
+        if(chosen!==ans)b.classList.add('tf-wrong');
+        var lbl=ans==='1'?'True':'False', cls=ans==='1'?'t':'f';
+        fb.innerHTML='<b class="'+cls+'">'+lbl+'.</b> '+why+(chosen===ans?'  ✓ nice!':'');
+        fb.classList.add('show');
+      });
+    });
+  });
+
+  /* in-page Python editor (Pyodide, lazy-loaded once) */
+  var pyReady=null;
+  function loadPy(status){
+    if(pyReady) return pyReady;
+    status.textContent='Loading Python… (first time only, ~5s)';
+    pyReady=new Promise(function(res,rej){
+      var s=document.createElement('script');
+      s.src='https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js';
+      s.onload=function(){window.loadPyodide().then(res).catch(rej);};
+      s.onerror=rej;document.head.appendChild(s);
+    });
+    return pyReady;
+  }
+  function runPy(code,outEl,status){
+    status.textContent='Running…';
+    loadPy(status).then(function(py){
+      status.textContent='';
+      py.globals.set('_user_src',code);
+      py.runPython(["import sys, io, traceback","sys.stdout = io.StringIO()","try:","    exec(_user_src, {})","except Exception:","    traceback.print_exc(file=sys.stdout)","_out = sys.stdout.getvalue()"].join("\n"));
+      outEl.textContent=py.globals.get('_out')||'(ran with no output)';
+    }).catch(function(){status.textContent='';outEl.textContent='Could not load Python here — use the Trinket link instead.';});
+  }
+  document.querySelectorAll('.edopen').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var ed=btn.parentElement.parentElement.querySelector('.editor');
+      if(!ed) return;
+      ed.hidden=!ed.hidden; btn.textContent=ed.hidden?'▶ Open Python editor':'▾ Hide editor';
+    });
+  });
+  document.querySelectorAll('.ed-run').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var ed=btn.closest('.editor');
+      runPy(ed.querySelector('.ed-code').value, ed.querySelector('.ed-out'), ed.querySelector('.ed-status'));
+    });
+  });
+
+  /* hero step counter ticks up like a pedometer */
+  var walkCount=document.getElementById('walkCount');
+  if(walkCount && !reduce){var _wn=0;setInterval(function(){_wn+=1;walkCount.textContent=_wn;},450);}
 
   var vBox=document.getElementById('varBox'),vl2=document.getElementById('vl2'),vOut=document.getElementById('varOut'),vCleared=false;
   function vlog(code,result){if(!vCleared){vOut.innerHTML='';vCleared=true;}var line=document.createElement('div');line.className='out';line.textContent=code+'   →   steps is now '+result;vOut.appendChild(line);requestAnimationFrame(function(){line.classList.add('show');});vOut.scrollTop=vOut.scrollHeight;}
