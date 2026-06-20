@@ -436,6 +436,15 @@
   .bigintro{font-family:var(--display);font-weight:700;font-size:clamp(2.1rem,8vw,3.4rem);line-height:1.06;letter-spacing:-.02em;color:var(--ink);margin:8px 0 16px}
   .bigintro .accent{color:var(--coral)}
 
+  /* next-word prediction blanks */
+  .nwp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+  .nwp-group{background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .nwp-group.one{border-left:4px solid var(--green)}
+  .nwp-group.many{border-left:4px solid var(--coral)}
+  .nwp-h{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .nwp-q{font-size:1rem;color:var(--ink-2);margin:12px 0;line-height:1.8}
+  .blank{display:inline-block;min-width:84px;border-bottom:2px solid var(--coral);height:1.05em;vertical-align:bottom;margin:0 2px}
+
   /* quiz */
   .quiz{background:var(--ink);border-radius:var(--radius);padding:24px;margin-top:14px;color:var(--paper)}
   .quiz h3{font-family:var(--display);font-weight:600;font-size:1.15rem;margin:0 0 4px;color:var(--paper)}
@@ -459,7 +468,7 @@
 
   @media(max-width:680px){
     .side{display:none}
-    .compare,.branches,.recap,.tools,.ideagrid{grid-template-columns:1fr}
+    .compare,.branches,.recap,.tools,.ideagrid,.nwp{grid-template-columns:1fr}
     .loop-stage{grid-template-columns:1fr;justify-items:center}
     .machine{grid-template-columns:1fr;gap:14px}.arrow{transform:rotate(90deg)}
     .pills .lbltext{display:none}
@@ -539,6 +548,26 @@
         <button class="gnav next" type="button" aria-label="Next">›</button>
         <div class="gdots"></div>
       </div>
+    </section>
+
+    <!-- Next-word prediction (before video) -->
+    <section class="chunk" data-step="1">
+      <p class="eyebrow">Step 1 · Learn Smart</p>
+      <h2 class="ch">It's really just guessing the next word</h2>
+      <p>Before the video, fill these in your head. The blank jumps out instantly — and that's exactly what a chatting AI does, one word at a time.</p>
+      <div class="nwp">
+        <div class="nwp-group one">
+          <div class="nwp-h">Easy · one obvious word</div>
+          <p class="nwp-q">"The currency of Singapore is the Singapore <span class="blank"></span>"</p>
+          <p class="nwp-q">"You tap your card on the bus using an EZ-<span class="blank"></span>"</p>
+        </div>
+        <div class="nwp-group many">
+          <div class="nwp-h">Trickier · a few good answers</div>
+          <p class="nwp-q">"For breakfast I ordered kaya toast with <span class="blank"></span>"</p>
+          <p class="nwp-q">"Let's makan at the <span class="blank"></span>"</p>
+        </div>
+      </div>
+      <p>When one word is obvious, the AI is almost certain. When several fit, it weighs them up and picks — that "spread" of likely words is what the video explains next.</p>
     </section>
 
     <!-- C1b — Watch video (own slide) -->
