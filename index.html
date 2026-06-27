@@ -38,7 +38,7 @@
   .track .fill{height:100%;background:var(--coral);width:0;transition:width .3s ease}
 
   /* main / chunks */
-  .main{flex:1;overflow-y:auto;position:relative;scroll-behavior:smooth}
+  .main{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;scroll-behavior:smooth}
   .chunk{display:none;max-width:760px;margin:0 auto;padding:30px 22px 56px}
   .chunk.active{display:block}
   .chunk.active.fromR{animation:inR .34s ease}
@@ -193,11 +193,6 @@
   .vannot{display:flex;flex-direction:column;gap:8px;font-size:.84rem;color:var(--ink-2)}
   .vannot .a-row{display:flex;align-items:center;gap:8px}
   .vannot .a-row .sw{width:12px;height:12px;border-radius:3px;flex:none}
-
-  /* loop tabs (slide 6) */
-  .tabs{display:inline-flex;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px;margin-bottom:4px}
-  .tab{font-family:var(--body);font-weight:600;font-size:.86rem;border:none;background:transparent;color:var(--ink-2);padding:7px 16px;border-radius:8px;cursor:pointer}
-  .tab.on{background:var(--ink);color:var(--paper)}
 
   /* ===== concept intro animations (auto-play, "show then do") ===== */
   .demo{position:relative;background:linear-gradient(180deg,#fff,#FBF9F3);border:1px solid var(--line);border-radius:var(--radius);height:160px;margin:14px 0;overflow:hidden;display:grid;place-items:center}
@@ -412,7 +407,7 @@
 
   /* line-by-line code execution walkthrough */
   .walk{margin-top:14px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--code-bg)}
-  .walk-code{position:relative;padding:14px 16px 90px 14px;font-family:var(--mono);font-size:.9rem;line-height:1.95;color:var(--code-fg)}
+  .walk-code{position:relative;padding:14px 16px 90px 14px;font-family:var(--mono);font-size:.9rem;line-height:1.95;color:var(--code-fg);overflow-x:auto}
   .wl{position:relative;white-space:pre;padding-left:20px;border-radius:6px;transition:background .2s}
   .wl .ptr{position:absolute;left:0;color:var(--coral);opacity:0;transition:opacity .2s;font-size:.78rem;top:3px}
   .wl.active{background:rgba(255,106,61,.16)}
@@ -445,6 +440,19 @@
   .nwp-q{font-size:1rem;color:var(--ink-2);margin:12px 0;line-height:1.8}
   .blank{display:inline-block;min-width:84px;border-bottom:2px solid var(--coral);height:1.05em;vertical-align:bottom;margin:0 2px}
 
+  /* code flavour tabs */
+  .tabs{margin-top:14px}
+  .tabbar{display:flex;gap:6px;flex-wrap:wrap}
+  .tab{flex:1 1 0;min-width:130px;text-align:center;font-family:var(--body);font-weight:700;font-size:.78rem;border:1px solid var(--line);border-bottom:none;background:var(--paper);color:var(--muted);padding:9px 12px;border-radius:9px 9px 0 0;cursor:pointer;white-space:nowrap}
+  .tab.on{background:var(--code-bg);color:#fff;border-color:var(--code-bg)}
+  .tabpane{display:none}
+  .tabpane.on{display:block}
+  .tabpane .codewrap{margin-top:0;border-top-left-radius:0;border-top-right-radius:0}
+
+  /* firmware figures */
+  .fwfig{margin:16px 0;display:flex;justify-content:center}
+  .fwfig svg{width:100%;max-width:460px;height:auto;border:1px solid var(--line);border-radius:12px;background:var(--paper-2)}
+
   /* quiz */
   .quiz{background:var(--ink);border-radius:var(--radius);padding:24px;margin-top:14px;color:var(--paper)}
   .quiz h3{font-family:var(--display);font-weight:600;font-size:1.15rem;margin:0 0 4px;color:var(--paper)}
@@ -473,7 +481,17 @@
     .machine{grid-template-columns:1fr;gap:14px}.arrow{transform:rotate(90deg)}
     .pills .lbltext{display:none}
     .navbtn{padding:11px 16px}
+    .code{font-size:.74rem;padding:13px 13px}
+    .walk-code{font-size:.78rem}
+    .editor .ed-code,.editor .ed-out{font-size:.76rem}
+    .chunk{padding:26px 16px 56px}
   }
+
+  /* group progress dots */
+  .grpdots{display:flex;gap:7px;align-items:center;margin:-4px 0 14px}
+  .grpdot{width:9px;height:9px;border-radius:50%;border:none;background:var(--line);cursor:pointer;padding:0;transition:background .2s,transform .2s}
+  .grpdot:hover{transform:scale(1.25)}
+  .grpdot.on{background:var(--coral);width:22px;border-radius:5px}
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -1284,14 +1302,25 @@ while n &lt; 4:
       <div class="linkrow"><a href="https://microbit.org" target="_blank" rel="noopener">microbit.org ↗</a><a href="https://python.microbit.org" target="_blank" rel="noopener" class="alt">Python editor ↗</a></div>
     </section>
 
-    <!-- Connect it -->
+    <!-- Two ways chooser -->
     <section class="chunk" data-step="2">
       <p class="eyebrow">Step 2 · Code Fast</p>
-      <h2 class="ch">1 · Connect it</h2>
-      <p>Plug the micro:bit into your laptop with the USB cable. It appears like a little USB drive — that's how your code gets onto it.</p>
-      <img class="userimg" src="images/connect-microbit.jpg" alt="How to connect the micro:bit to a laptop" onerror="this.style.display='none';var n=this.nextElementSibling;if(n)n.style.display='block';">
-      <div class="imgnote" style="display:none">Add your own connection photo: drop the file into an <code>images/</code> folder in your repo named <code>connect-microbit.jpg</code> and commit — it will appear here automatically.</div>
-      <div class="callout"><b>Beginner tip.</b> In the Python editor, click <em>Connect</em> and pick your micro:bit once; after that, sending code is a single click.</div>
+      <h2 class="ch">Two ways to get code on it</h2>
+      <p>Pick whichever suits your room — both run the same ideas, only the editor and the connection change. We'll show every program in <strong>both flavours</strong>.</p>
+      <div class="compare">
+        <div class="ccard good">
+          <div class="h">📱 Route A · Phone + app</div>
+          <p>Wireless, over <strong>Bluetooth</strong>. Code in <strong>MakeCode</strong>, flash with the free micro:bit app. No cable.</p>
+          <p class="q">Best when students have phones or tablets.</p>
+          <p style="margin:10px 0 0"><a href="https://microbit.org/get-started/user-guide/mobile/" target="_blank" rel="noopener">Step-by-step on microbit.org ↗</a></p>
+        </div>
+        <div class="ccard">
+          <div class="h">💻 Route B · Computer + cable</div>
+          <p>Plug in over <strong>USB</strong>. Code in <strong>MicroPython</strong> at python.microbit.org, flash from the browser.</p>
+          <p class="q">Best in a computer lab.</p>
+          <p style="margin:10px 0 0"><a href="https://microbit.org/get-started/user-guide/transfer-code-to-the-microbit/" target="_blank" rel="noopener">Step-by-step on microbit.org ↗</a></p>
+        </div>
+      </div>
     </section>
 
     <!-- How accelerometer works -->
@@ -1340,16 +1369,31 @@ while n &lt; 4:
     <section class="chunk" data-step="2">
       <p class="eyebrow">Step 2 · Code Fast</p>
       <h2 class="ch">2 · Build the step counter</h2>
-      <p>Every line is a Step 1 idea in the wild — a variable, a forever <code>while</code> loop, and an <code>if</code>.</p>
-      <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="kw">from</span> microbit <span class="kw">import</span> *
+      <p>Every line is a Step 1 idea in the wild — a variable, a loop, and an <code>if</code>. Tap your editor's flavour:</p>
+      <div class="tabs">
+        <div class="tabbar"><button class="tab on" type="button">MicroPython</button><button class="tab" type="button">MakeCode</button></div>
+        <div class="tabpane on">
+          <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="kw">from</span> microbit <span class="kw">import</span> *
 
-steps = 0              <span class="cmt"># the variable (a box)</span>
-<span class="kw">while</span> True:            <span class="cmt"># the loop (runs forever)</span>
-    <span class="kw">if</span> accelerometer.was_gesture(<span class="fn">'shake'</span>):  <span class="cmt"># the if (a step!)</span>
-        steps += 1     <span class="cmt"># add one</span>
+steps = 0
+<span class="kw">while</span> True:
+    <span class="kw">if</span> accelerometer.was_gesture(<span class="fn">'shake'</span>):
+        steps += 1
         display.show(steps)</pre></div>
-      <div class="callout"><b>How <code>shake</code> works.</b> <code>accelerometer.was_gesture('shake')</code> watches those X/Y/Z readings and returns <em>True</em> when it sees a sharp bounce. Each detected shake counts as roughly one step — simple, and close enough to start.</div>
-      <div class="linkrow"><a href="https://python.microbit.org" target="_blank" rel="noopener">Open the Python editor ↗</a></div>
+        </div>
+        <div class="tabpane">
+          <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code">steps = 0
+
+<span class="kw">def</span> <span class="fn">on_shake</span>():
+    <span class="kw">global</span> steps
+    steps += 1
+    basic.show_number(steps)
+
+input.on_gesture(Gesture.SHAKE, on_shake)</pre></div>
+        </div>
+      </div>
+      <div class="linkrow"><a href="https://python.microbit.org" target="_blank" rel="noopener">Python editor ↗</a><a href="https://makecode.microbit.org" target="_blank" rel="noopener" class="alt">MakeCode editor ↗</a></div>
+      <div class="callout"><b>How <code>shake</code> works.</b> The micro:bit watches those X/Y/Z readings and fires a <em>shake</em> when it sees a sharp bounce. Each shake counts as roughly one step — simple, and close enough to start.</div>
     </section>
 
     <!-- Simulator -->
@@ -1365,17 +1409,120 @@ steps = 0              <span class="cmt"># the variable (a box)</span>
       <div class="callout"><b>Why simulate first?</b> You catch mistakes instantly, without unplugging and re-flashing each time — much faster to learn.</div>
     </section>
 
-    <!-- Download to device -->
+    <!-- Route A: get app + video -->
     <section class="chunk" data-step="2">
-      <p class="eyebrow">Step 2 · Code Fast</p>
-      <h2 class="ch">4 · Download to your micro:bit</h2>
-      <p>Happy with the simulator? Now put it on the real thing:</p>
+      <p class="eyebrow">Step 2 · Route A · 1 of 3</p>
+      <h2 class="ch">A1 · Get the micro:bit app</h2>
+      <p>Free and official, for iPhone/iPad and Android. In the <strong>App Store</strong> or <strong>Google Play</strong>, search <strong>micro:bit</strong> and install the app by the Micro:bit Educational Foundation.</p>
+      <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/9Bmp91uT674" title="Pairing and flashing the micro:bit over Bluetooth" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+      <div class="linkrow"><a href="https://microbit.org/get-started/" target="_blank" rel="noopener">microbit.org · get started ↗</a></div>
+    </section>
+
+    <!-- Route A: pair bluetooth -->
+    <section class="chunk" data-step="2">
+      <p class="eyebrow">Step 2 · Route A · 2 of 3</p>
+      <h2 class="ch">A2 · Pair over Bluetooth</h2>
+      <p>Turn on your phone's Bluetooth and power the micro:bit. Then, on the micro:bit:</p>
       <ul>
-        <li>With the micro:bit plugged in, click <strong>Send to micro:bit</strong> (or <strong>Download</strong>) in the editor.</li>
-        <li>The first time, choose your micro:bit from the pop-up to pair it.</li>
-        <li>A light on the back flickers as the code copies over. When it stops, your program is running.</li>
+        <li>Hold <strong>A + B</strong>, press and release <strong>Reset</strong>, and keep holding A + B.</li>
+        <li>The LEDs fill, show the Bluetooth logo, then a <strong>pattern</strong> — now let go of A + B.</li>
+        <li>In the app: <em>Choose micro:bit → Pair a new micro:bit</em>, then copy that pattern (or type the 6-digit code).</li>
+        <li>A <strong>tick ✓</strong> on the micro:bit means you're paired. An <strong>✗</strong> means try again.</li>
       </ul>
-      <div class="callout"><b>No pairing pop-up?</b> Click <em>Download</em> to save the <code>.hex</code> file, then drag it onto the <code>MICROBIT</code> drive that appears on your computer — same result.</div>
+      <div class="callout"><b>iPhone &amp; Android.</b> Both use the same app and the same pattern step. (Android can also use a USB cable with an adapter if you prefer.)</div>
+    </section>
+
+    <!-- Route A: flash from app -->
+    <section class="chunk" data-step="2">
+      <p class="eyebrow">Step 2 · Route A · 3 of 3</p>
+      <h2 class="ch">A3 · Flash from the app</h2>
+      <p>With your micro:bit paired:</p>
+      <ul>
+        <li>In the app, tap <strong>Create Code</strong> — it opens MakeCode in your browser.</li>
+        <li>Build your program, then tap <strong>Download</strong> — it hands the file back to the app.</li>
+        <li>On the app's <strong>Flash</strong> page, choose your program and tap <strong>Flash</strong>.</li>
+        <li>The bars fill as it sends wirelessly. When they finish, your code is running.</li>
+      </ul>
+      <div class="callout"><b>Heads-up.</b> Flashing later over a USB cable erases the Bluetooth pairing — just pair again if that happens.</div>
+    </section>
+
+    <!-- Route B: USB -->
+    <section class="chunk" data-step="2">
+      <p class="eyebrow">Step 2 · Route B · Computer</p>
+      <h2 class="ch">B · Connect &amp; flash over USB</h2>
+      <p>On a laptop, the cable is the quickest path:</p>
+      <img class="userimg" src="images/connect-microbit.jpg" alt="How to connect the micro:bit to a laptop" onerror="this.style.display='none';var n=this.nextElementSibling;if(n)n.style.display='block';">
+      <div class="imgnote" style="display:none">Add your own connection photo: drop a file into <code>images/connect-microbit.jpg</code> in your repo and commit — it appears here automatically.</div>
+      <ul>
+        <li>Plug the micro:bit in with USB — it shows up like a little drive.</li>
+        <li>In python.microbit.org (or MakeCode), click <strong>Connect</strong> and pick your micro:bit once.</li>
+        <li>Click <strong>Send to micro:bit</strong>. A light flickers as it copies; then it runs.</li>
+      </ul>
+      <div class="callout"><b>No Connect button?</b> Click <em>Download</em> to save the <code>.hex</code>, then drag it onto the <code>MICROBIT</code> drive — same result.</div>
+    </section>
+
+    <!-- Firmware: check version -->
+    <section class="chunk" data-step="2">
+      <p class="eyebrow">Step 2 · Good to know · 1 of 2</p>
+      <h2 class="ch">Check your firmware version</h2>
+      <p>Firmware is the tiny built-in program that lets the micro:bit talk to your computer. Newer firmware means smoother flashing — worth a one-time check, especially on older school sets.</p>
+      <div class="fwfig">
+        <svg viewBox="0 0 460 218" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The DETAILS.TXT file on the MICROBIT drive, with the Interface Version line highlighted">
+          <rect x="24" y="22" width="30" height="22" rx="4" fill="#3E6FA8"/>
+          <rect x="24" y="18" width="15" height="8" rx="3" fill="#3E6FA8"/>
+          <text x="64" y="39" font-family="monospace" font-size="15" font-weight="700" fill="#16263A">MICROBIT</text>
+          <text x="172" y="39" font-family="monospace" font-size="12" fill="#8A95A3">— USB drive</text>
+          <rect x="24" y="58" width="412" height="138" rx="10" fill="#16263A"/>
+          <text x="42" y="84" font-family="monospace" font-size="13" font-weight="700" fill="#7FD1A8">DETAILS.TXT</text>
+          <text x="42" y="110" font-family="monospace" font-size="12" fill="#8A95A3">Daplink Mode: Interface</text>
+          <rect x="34" y="122" width="392" height="26" rx="6" fill="#FF6A3D" fill-opacity="0.22"/>
+          <text x="42" y="140" font-family="monospace" font-size="13.5" font-weight="700" fill="#FF9E7A">Interface Version: 0255</text>
+          <text x="42" y="168" font-family="monospace" font-size="12" fill="#8A95A3">Bootloader Version: 0255</text>
+          <text x="42" y="186" font-family="monospace" font-size="11" fill="#8A95A3">URL: microbit.org/device/...</text>
+        </svg>
+      </div>
+      <ul>
+        <li>Plug the micro:bit into a computer with USB — it appears as a drive called <code>MICROBIT</code>.</li>
+        <li>Open the file <code>DETAILS.TXT</code> on that drive.</li>
+        <li>Find the <strong>Interface Version</strong> line. On the newest micro:bit V2 it's <code>0255</code> or higher.</li>
+      </ul>
+      <div class="callout"><b>What's a good version?</b> If flashing already works, you're fine. Very old versions (like <code>0234</code>) are worth updating. The firmware page lists the latest for each board.</div>
+      <div class="linkrow"><a href="https://microbit.org/get-started/user-guide/firmware/" target="_blank" rel="noopener">Firmware guide on microbit.org ↗</a></div>
+    </section>
+
+    <!-- Firmware: update -->
+    <section class="chunk" data-step="2">
+      <p class="eyebrow">Step 2 · Good to know · 2 of 2</p>
+      <h2 class="ch">Update the firmware (if needed)</h2>
+      <p>Only if it's out of date or flashing is flaky. The trick is <strong>MAINTENANCE mode</strong> — then you drag one file across.</p>
+      <div class="fwfig">
+        <svg viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hold reset and plug in to enter MAINTENANCE mode, then drag the firmware hex file onto the MAINTENANCE drive">
+          <rect x="22" y="46" width="168" height="108" rx="12" fill="#16263A"/>
+          <circle cx="74" cy="100" r="13" fill="#24405C" stroke="#fff" stroke-width="2"/>
+          <text x="74" y="134" text-anchor="middle" font-family="monospace" font-size="10" fill="#fff">RESET</text>
+          <circle cx="132" cy="100" r="9" fill="#E3C04A"/>
+          <circle cx="132" cy="100" r="15" fill="none" stroke="#E3C04A" stroke-opacity="0.45" stroke-width="3"/>
+          <text x="132" y="134" text-anchor="middle" font-family="monospace" font-size="9.5" fill="#E3C04A">LED on</text>
+          <text x="106" y="34" text-anchor="middle" font-family="monospace" font-size="11" fill="#16263A">Hold RESET + plug in</text>
+          <path d="M198 100 H242" stroke="#8A95A3" stroke-width="3"/>
+          <path d="M242 100 l-9 -6 v12 z" fill="#8A95A3"/>
+          <rect x="258" y="46" width="180" height="108" rx="12" fill="#FFFFFF" stroke="#E3DFD6"/>
+          <text x="348" y="72" text-anchor="middle" font-family="monospace" font-size="13" font-weight="700" fill="#16263A">MAINTENANCE</text>
+          <rect x="316" y="86" width="64" height="42" rx="6" fill="#FF6A3D"/>
+          <text x="348" y="112" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#fff">.hex</text>
+          <path d="M348 150 V134" stroke="#1FB67A" stroke-width="3"/>
+          <path d="M348 134 l-6 9 h12 z" fill="#1FB67A"/>
+          <text x="348" y="172" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#1FB67A">drag &amp; drop</text>
+        </svg>
+      </div>
+      <ul>
+        <li>Download the latest firmware <code>.hex</code> from the micro:bit firmware page (pick the file for your board).</li>
+        <li>Enter <strong>MAINTENANCE mode</strong>: unplug USB, hold the <strong>Reset</strong> button, plug USB back in, then release Reset. A drive called <code>MAINTENANCE</code> appears and a <strong>yellow LED</strong> stays on.</li>
+        <li>Drag the <code>.hex</code> onto the <code>MAINTENANCE</code> drive. The yellow LED flashes while it copies.</li>
+        <li>When it stops, the micro:bit resets back to <code>MICROBIT</code>. Re-open <code>DETAILS.TXT</code> to confirm the new version.</li>
+      </ul>
+      <div class="callout"><b>Safe to do.</b> This updates only the interface chip, not your code. The official page has the download and screenshots for each step.</div>
+      <div class="linkrow"><a href="https://microbit.org/get-started/user-guide/firmware/" target="_blank" rel="noopener">Download &amp; full steps on microbit.org ↗</a></div>
     </section>
 
     <!-- Battery + wear -->
@@ -1389,6 +1536,56 @@ steps = 0              <span class="cmt"># the variable (a box)</span>
         <li>Strap the micro:bit and battery box to your <strong>ankle</strong> with a band, so each stride gives a clear bounce.</li>
       </ul>
       <p>Now walk a known number of steps and compare. Does the count match? Almost never exactly — which is the perfect thing to improve next.</p>
+    </section>
+
+    <!-- Fun 1: dice -->
+    <section class="chunk" data-step="2">
+      <p class="eyebrow">Step 2 · Have fun · 1</p>
+      <h2 class="ch">🎲 Shake for a dice</h2>
+      <p>Same shake trick, brand-new toy: shake to roll a random number from 1 to 6. Flash it and play.</p>
+      <div class="tabs">
+        <div class="tabbar"><button class="tab on" type="button">MicroPython</button><button class="tab" type="button">MakeCode</button></div>
+        <div class="tabpane on">
+          <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="kw">from</span> microbit <span class="kw">import</span> *
+<span class="kw">import</span> random
+
+<span class="kw">while</span> True:
+    <span class="kw">if</span> accelerometer.was_gesture(<span class="fn">'shake'</span>):
+        display.show(str(random.randint(1, 6)))</pre></div>
+        </div>
+        <div class="tabpane">
+          <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="kw">def</span> <span class="fn">on_shake</span>():
+    basic.show_number(randint(1, 6))
+
+input.on_gesture(Gesture.SHAKE, on_shake)</pre></div>
+        </div>
+      </div>
+      <div class="callout"><b>Your twist.</b> Make it a coin flip (1–2), or show a dice-face picture instead of a number. Stuck? Tap <b>Ask AI</b> on the code.</div>
+    </section>
+
+    <!-- Fun 2: rock paper scissors -->
+    <section class="chunk" data-step="2">
+      <p class="eyebrow">Step 2 · Have fun · 2</p>
+      <h2 class="ch">✊ ✋ ✌️ Rock, paper, scissors</h2>
+      <p>Shake to play — the micro:bit shows R, P or S at random. Challenge the person next to you.</p>
+      <div class="tabs">
+        <div class="tabbar"><button class="tab on" type="button">MicroPython</button><button class="tab" type="button">MakeCode</button></div>
+        <div class="tabpane on">
+          <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="kw">from</span> microbit <span class="kw">import</span> *
+<span class="kw">import</span> random
+
+<span class="kw">while</span> True:
+    <span class="kw">if</span> accelerometer.was_gesture(<span class="fn">'shake'</span>):
+        display.scroll(random.choice([<span class="fn">"R"</span>, <span class="fn">"P"</span>, <span class="fn">"S"</span>]))</pre></div>
+        </div>
+        <div class="tabpane">
+          <div class="codewrap"><button class="copy" data-copy>Copy</button><pre class="code"><span class="kw">def</span> <span class="fn">on_shake</span>():
+    basic.show_string([<span class="fn">"R"</span>, <span class="fn">"P"</span>, <span class="fn">"S"</span>][randint(0, 2)])
+
+input.on_gesture(Gesture.SHAKE, on_shake)</pre></div>
+        </div>
+      </div>
+      <div class="callout"><b>Your twist.</b> Show full pictures instead of letters (the micro:bit has built-in images), or keep score with a variable.</div>
     </section>
 
     <!-- Make it better -->
@@ -1673,6 +1870,15 @@ for i in range(len(days)):
     });
   });
 
+  /* code flavour tabs */
+  document.querySelectorAll('.tabs').forEach(function(tabs){
+    var btns=tabs.querySelectorAll('.tab'), panes=tabs.querySelectorAll('.tabpane');
+    btns.forEach(function(b,i){b.addEventListener('click',function(){
+      btns.forEach(function(x){x.classList.remove('on');}); b.classList.add('on');
+      panes.forEach(function(p,j){p.classList.toggle('on',j===i);});
+    });});
+  });
+
   /* hero step counter ticks up like a pedometer */
   var walkCount=document.getElementById('walkCount');
   if(walkCount && !reduce){var _wn=0;setInterval(function(){_wn+=1;walkCount.textContent=_wn;},450);}
@@ -1860,6 +2066,23 @@ for i in range(len(days)):
     if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT')return;
     if(e.key==='ArrowRight'){e.preventDefault();if(cur_i<TOTAL-1)go(cur_i+1,1);}
     else if(e.key==='ArrowLeft'){e.preventDefault();if(cur_i>0)go(cur_i-1,-1);}
+  });
+
+  /* group progress dots — auto-built from "N of M" eyebrows, clickable to jump within the group */
+  chunks.forEach(function(c,gi){
+    var eb=c.querySelector('.eyebrow'); if(!eb)return;
+    var m=eb.textContent.match(/(\d+)\s+of\s+(\d+)/i); if(!m)return;
+    var cur=+m[1], tot=+m[2]; if(tot<2||tot>9||cur<1||cur>tot)return;
+    var start=gi-(cur-1);
+    var wrap=document.createElement('div'); wrap.className='grpdots';
+    for(var d=0;d<tot;d++){(function(dd){
+      var dot=document.createElement('button'); dot.type='button';
+      dot.className='grpdot'+(dd===cur-1?' on':'');
+      dot.setAttribute('aria-label','Go to '+(dd+1)+' of '+tot);
+      dot.onclick=function(){go(start+dd);};
+      wrap.appendChild(dot);
+    })(d);}
+    eb.parentNode.insertBefore(wrap, eb.nextSibling);
   });
 
   render(1);
